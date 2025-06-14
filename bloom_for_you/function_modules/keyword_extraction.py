@@ -29,10 +29,14 @@ def _get_prompt(file_name: str) -> str:
 
 def keyword_extraction(prompt_path, duration=5, openai_api_key=None):
     '''
-    in: prompt_path(resource 내의 존재하는 파일명 또는 원하는 파일 절대경로)
-        음성 인식 시간
-        open_api_key
-    out: response['text'](gpt 대답)
+    마이크로부터 지정한 시간만큼 음성을 녹음한 후,
+    Whisper API로 텍스트로 변환하고, 변환된 텍스트를 GPT에 전달하여 키워드를 추출합니다.
+
+    in: prompt_path (str): GPT에 사용할 프롬프트가 저장된 파일 경로 (resource 내 파일명 또는 절대 경로)
+        duration (int): 음성 녹음 시간 (초)
+        openai_api_key (str): OpenAI API 키 (Whisper 및 GPT 호출용)
+    out: 
+        response (str): GPT로부터 받은 키워드 응답 텍스트 (response['text'])
     '''
     if openai_api_key is None:
         openai_api_key = os.getenv("OPENAI_API_KEY")

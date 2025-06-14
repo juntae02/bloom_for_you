@@ -12,9 +12,12 @@ samplerate = 16000
 
 def stt(duration=5, openai_api_key=None) -> str:
     '''
-    in: openai_api_key
-        음성 인식 시간
-    out: 녹음 내용 텍스트로 반환
+    마이크로부터 지정한 시간만큼 음성을 녹음한 후,
+    OpenAI Whisper API를 이용해 텍스트로 변환합니다.
+
+    in: duration (int): 녹음 시간 (초). 기본값은 5초.
+        openai_api_key (str or None): OpenAI API 키. 전달하지 않으면 환경변수 'OPENAI_API_KEY'를 사용합니다.
+    out: 음성 인식 결과 텍스트
     '''
     if openai_api_key is None:
         openai_api_key = os.getenv("OPENAI_API_KEY")
