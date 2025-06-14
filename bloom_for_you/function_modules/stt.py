@@ -10,7 +10,12 @@ import os
 samplerate = 16000
 
 
-def stt(openai_api_key=None, duration=5):
+def stt(duration=5, openai_api_key=None) -> str:
+    '''
+    in: openai_api_key
+        음성 인식 시간
+    out: 녹음 내용 텍스트로 반환
+    '''
     if openai_api_key is None:
         openai_api_key = os.getenv("OPENAI_API_KEY")
         if openai_api_key is None:

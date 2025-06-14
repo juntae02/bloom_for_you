@@ -12,10 +12,10 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 package_path = os.path.abspath(os.path.join(current_dir, ".."))
 
 
-def _get_prompt(file_name: str):
+def _get_prompt(file_name: str) -> str:
     '''
-    in: file_name 
-    out
+    in: file_name
+    out: file_name 내용
     '''
     # 1. 절대경로일 경우: 그대로 사용
     if os.path.isabs(file_name):
@@ -27,7 +27,13 @@ def _get_prompt(file_name: str):
     with open(file_path, "r", encoding="utf-8") as f:
         return f.read()
 
-def keyword_extraction(prompt_path, openai_api_key=None):
+def keyword_extraction(prompt_path, duration=5, openai_api_key=None):
+    '''
+    in: prompt_path(resource 내의 존재하는 파일명 또는 원하는 파일 절대경로)
+        음성 인식 시간
+        open_api_key
+    out: response['text'](gpt 대답)
+    '''
     if openai_api_key is None:
         openai_api_key = os.getenv("OPENAI_API_KEY")
         if openai_api_key is None:
@@ -43,7 +49,7 @@ def keyword_extraction(prompt_path, openai_api_key=None):
     )
     lang_chain = LLMChain(llm=llm, prompt=prompt_template)
 
-    output_message = stt(openai_api_key)
+    output_message = stt(openai_api_key, duration)
     response = lang_chain.invoke({"user_input": output_message})
    
     print(f"반환할 대답: {response['text']}")
