@@ -1,0 +1,6 @@
+openai
+sounddevice
+wavio
+pyttsx3
+numpy
+requests
