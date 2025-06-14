@@ -14,6 +14,8 @@ from gtts import gTTS
 import os
 import subprocess
 # from playsound import playsound
+def make_txt(prompt, input_list):
+    return prompt +input_list
 
 def tts(text:str):
     text = text

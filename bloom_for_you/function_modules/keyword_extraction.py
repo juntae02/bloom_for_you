@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from langchain.chains import LLMChain
 from langchain_community.chat_models import ChatOpenAI
-from stt import stt
+from bloom_for_you.function_modules.stt import stt
 import warnings
 
 from langchain.prompts import PromptTemplate
@@ -21,7 +21,7 @@ def _get_prompt(file_name: str):
     with open(file_path, "r", encoding="utf-8") as f:
         return f.read()
 
-def keyword_extraction(openai_api_key=None):
+def keyword_extraction(prompt_path, openai_api_key=None):
     if openai_api_key is None:
         openai_api_key = os.getenv("OPENAI_API_KEY")
         if openai_api_key is None:
@@ -30,7 +30,7 @@ def keyword_extraction(openai_api_key=None):
     llm = ChatOpenAI(
         model="gpt-4o", temperature=0.5, openai_api_key=openai_api_key
     )
-    prompt_content = _get_prompt("test.txt")
+    prompt_content = _get_prompt(prompt_path)
 
     prompt_template = PromptTemplate(
         input_variables=["user_input"], template=prompt_content
@@ -40,8 +40,8 @@ def keyword_extraction(openai_api_key=None):
     output_message = stt(openai_api_key)
     response = lang_chain.invoke({"user_input": output_message})
    
-    print(f"반환할 대답: {response}")
-    return response
+    print(f"반환할 대답: {response['text']}")
+    return response['text']
 
 
 if __name__ == "__main__":

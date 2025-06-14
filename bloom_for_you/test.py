@@ -5,6 +5,7 @@ from rclpy.node import Node
 from std_msgs.msg import Int32
 from bloom_for_you.function_modules.stt import stt
 from bloom_for_you.function_modules.tts import tts
+from bloom_for_you.function_modules.keyword_extraction import keyword_extraction
 
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
@@ -33,9 +34,10 @@ class Test(Node):
         self.test = self.create_subscription(Int32, '/test', callback = self.recommend_flower, qos_profile=10)
 
     def recommend_flower(self, msg):
-        ret_text = stt()
-        print(f'callback 결과: {ret_text}')
-        tts(ret_text)
+        # ret_text = stt()
+        # print(f'callback 결과: {ret_text}')
+        # tts(ret_text)
+        keyword_extraction("test.txt")
 
 
 def main():
