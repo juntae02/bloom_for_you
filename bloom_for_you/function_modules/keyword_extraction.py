@@ -7,10 +7,16 @@ import warnings
 
 from langchain.prompts import PromptTemplate
 
-package_path = "/home/rokey/r2_ws/src/bloom_for_you"
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# package_path = "/home/rokey/r2_ws/src/bloom_for_you"
+package_path = os.path.abspath(os.path.join(current_dir, ".."))
 
 
 def _get_prompt(file_name: str):
+    '''
+    in: file_name 
+    out
+    '''
     # 1. 절대경로일 경우: 그대로 사용
     if os.path.isabs(file_name):
         file_path = file_name
