@@ -6,16 +6,16 @@ import numpy as np
 import tempfile
 import os
 
-# from ament_index_python.packages import get_package_share_directory
-from dotenv import load_dotenv
-
-load_dotenv(dotenv_path=os.path.join(".env"))
-openai_api_key = os.getenv("OPENAI_API_KEY")
 duration = 5
 samplerate = 16000
 
 
-def stt():
+def stt(openai_api_key=None):
+    if openai_api_key is None:
+        openai_api_key = os.getenv("OPENAI_API_KEY")
+        if openai_api_key is None:
+            raise ValueError("API 키를 인자로 전달하거나 환경변수에 설정하세요.")
+
     # 녹음 설정
     print("음성 녹음을 시작합니다. \n 5초 동안 말해주세요...")
     audio = sd.rec(
