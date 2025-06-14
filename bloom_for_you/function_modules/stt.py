@@ -6,18 +6,18 @@ import numpy as np
 import tempfile
 import os
 
-duration = 5
+
 samplerate = 16000
 
 
-def stt(openai_api_key=None):
+def stt(openai_api_key=None, duration=5):
     if openai_api_key is None:
         openai_api_key = os.getenv("OPENAI_API_KEY")
         if openai_api_key is None:
             raise ValueError("API 키를 인자로 전달하거나 환경변수에 설정하세요.")
 
     # 녹음 설정
-    print("음성 녹음을 시작합니다. \n 5초 동안 말해주세요...")
+    print(f"음성 녹음을 시작합니다. \n {duration}초 동안 말해주세요...")
     audio = sd.rec(
         int(duration * samplerate),
         samplerate=samplerate,
