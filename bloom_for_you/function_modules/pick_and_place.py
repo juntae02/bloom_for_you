@@ -71,6 +71,13 @@ class RobotController(Node):
         while gripper.get_status()[0]:
             time.sleep(0.5)
 
+    def init_robot(self):
+        JReady = [0, 0, 90, 0, 90, 0]
+        movej(JReady, vel=VELOCITY, acc=ACC)
+        gripper.open_gripper()
+        mwait()
+
+
 
 def main(args=None):
     node = RobotController()
