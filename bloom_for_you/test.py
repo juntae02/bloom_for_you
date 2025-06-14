@@ -1,7 +1,8 @@
 import os
 import rclpy
 from rclpy.node import Node
-from bloom_for_you.function_modules.stt import STT
+from bloom_for_you.function_modules.stt import stt
+from std_msgs.msg import Int32
 
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
@@ -27,10 +28,11 @@ class Test(Node):
     def __init__(self):
         super().__init__('test_node')
     
-    subscriber(, callback = recommend_flower)
+        self.test = self.create_subscription(Int32, '/test', callback = self.recommend_flower, qos_profile=10)
 
-    def recommend_flower():
-        STT.speech2text()
+    def recommend_flower(self, msg):
+        ret_text = stt()
+        print(f'callback 결과: {ret_text}')
 
 
 def main():
