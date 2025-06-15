@@ -11,7 +11,10 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
     ],
-    install_requires=['setuptools'],
+    install_requires=[
+        'setuptools',
+        'bloom_for_you_interfaces'  # 추가: 인터페이스 패키지 의존성
+    ],
     zip_safe=True,
     maintainer='d-1',
     maintainer_email='your@example.com',
@@ -24,6 +27,7 @@ setup(
             'pub_test = bloom_for_you.publisher_test:main',
             'sub_test = bloom_for_you.subscriber_test:main',
             'test = bloom_for_you.test:main',
+            'gui_test = bloom_for_you.gui_test:main',
         ],
     },
 )
