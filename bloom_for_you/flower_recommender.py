@@ -77,6 +77,7 @@ class FlowerApp(App):
         super().__init__(**kwargs)  
         self.flower = flower 
         self.node = node
+        self.redo = False   # 재선택 확인용
         # 퍼블리셔 생성
         self.publisher = self.node.create_publisher(FlowerInfo, 'flower_info', 10)
 
@@ -140,49 +141,57 @@ class FlowerApp(App):
         self.publisher.publish(msg)
         self.node.get_logger().info('전송 완료')
 
+        self.redo = False
         App.get_running_app().stop()
 
     def on_reselect(self, instance):
-        """재선택 버튼 클릭시 다시 선택 프로세스를 수행할 수 있습니다."""  # 추가
         print("재선택되었습니다.")
-        # TODO: rclpy나 다른 기능과 연결 가능
+        self.redo = True
+        App.get_running_app().stop()
 
 
 def main():
 ## command를 sub 해서 해당 코드 실행하게 하기
-
     rclpy.init()
     node = ExtractKeyword()
 
-    keyword = None
-    while keyword is None:
+    try:
+        while True:
+        # 꽃 키워드 추출
+            keyword = None
+            while keyword is None:
 ## 여기에 로봇이 선물 목적과 남은 기간을 묻는 부분 추가 
-        keyword = node.extract_keyword()    # 꽃 키워드 추출
+                keyword = node.extract_keyword()     
+                if keyword is None:
+                    print("목적이나 기간 정보가 빠진 듯합니다. 한 번 더 말씀해주세요.")
+                    time.sleep(3.0)
 
-        if keyword is None:
-            print("\n목적이나 기간 정보가 빠진 듯합니다. 한 번 더 말씀해주세요.")
-            time.sleep(3.0)
-        else:
-            print("추출 완료!", keyword)
+            object = keyword[0][0]         # 축하
+            destination = keyword[1][0]    # 1개월이내
+# tts(object) # 읽어주는 과정
 
-    object = keyword[0][0]         # 축하
-    destination = keyword[1][0]    # 1개월이내
-    # tts(object) # 읽어주는 과정
+        # json 파일과 꽃 키워드 매칭
+            with open(json_path, 'r') as f:
+                flower_data = json.load(f)
 
-# json 파일과 꽃 키워드 매칭
-    with open(json_path, 'r') as f:
-        flower_data = json.load(f)
+            flower = node.find_flower(flower_data, object, destination)
 
-    flower = node.find_flower(flower_data, object, destination)
+            if flower:
+                app = FlowerApp(flower, node)
+                app.run()
+                if app.redo:    # 재선택
+                    print("다시 선택합니다.")
+                    continue    
+                else:           # 꽃 선택
+                    print("선택 완료.")
+                    break  
+            else:
+                print("GUI를 실행시키지 못했습니다.")
+                break
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
 
-    if flower:
-        app = FlowerApp(flower, node)
-        app.run()
-    else:
-        print("GUI를 실행시키지 못했습니다.")
-
-    node.destroy_node()
-    rclpy.shutdown()
 
 if __name__ == "__main__":
     main()
