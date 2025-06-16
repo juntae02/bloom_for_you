@@ -10,7 +10,7 @@ import DR_init
 from bloom_for_you.function_modules.tts import tts
 from bloom_for_you.function_modules.onrobot import RG
 from bloom_for_you_interfaces.msg import Command
-
+from bloom_for_you_interfaces.msg import FlowerInfo
 # for single robot
 # ROBOT_ID = "dsr01"
 # ROBOT_MODEL = "m0609"
@@ -52,8 +52,8 @@ POS_CARD = []
 class FlowerWrapping(Node):
     def __init__(self):
         super().__init__("wrapping_node")
-        self.cmd_sub = self.create_subscription(Command, 'Command', self.wrap_flower, 10)
-        self.qr_pub = self.create_publisher(Command,'Command',10)
+        self.cmd_sub = self.create_subscription(FlowerInfo, 'flowerinfo', self.wrap_flower, 10)
+        self.qr_pub = self.create_publisher(FlowerInfo,'flowerinfo',10)
 
     def wrap_flower(self, msg):
         self.command = msg.command
