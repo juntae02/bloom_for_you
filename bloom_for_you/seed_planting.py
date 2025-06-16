@@ -18,6 +18,7 @@ class FlowerSubscriber(Node):
     def flower_callback(self, msg):
         self.get_logger().info('메시지 받았어!')
         self.get_logger().info(f"Id: {msg.id}")
+        self.get_logger().info(f"Id: {msg.command}")
         self.get_logger().info(f"Flower: {msg.flower_name}")
         self.get_logger().info(f"Meaning: {msg.flower_meaning}")
         self.get_logger().info(f"Duration (days): {msg.growth_duration_days}")

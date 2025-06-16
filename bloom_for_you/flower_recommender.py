@@ -33,13 +33,13 @@ CMD_RMD = 1 # 꽃 추천 노드 실행
 class ExtractKeyword(Node):
     def __init__(self):
         super().__init__('extract_keyword_node')
-    #     self.cmd_received = threading.Event()
-    #     self.subscription = self.create_subscription(FlowerInfo, 'flower_info', self.cmd_callback, 10)
+        self.cmd_received = threading.Event()
+        self.subscription = self.create_subscription(FlowerInfo, 'flower_info', self.cmd_callback, 10)
 
-    # def cmd_callback(self, msg):
-    #     if msg.command == CMD_RMD:
-    #         self.get_logger().info('Command 1 received, triggering main.')
-    #         self.cmd_received.set()
+    def cmd_callback(self, msg):
+        if msg.command == CMD_RMD:
+            self.get_logger().info('Command 1 received, triggering main.')
+            self.cmd_received.set()
 
     def extract_keyword(self):
         response = keyword_extraction(prompt_path)
@@ -162,13 +162,8 @@ class FlowerApp(App):
         App.get_running_app().stop()
 
 
-
-
-def main():
-## command를 sub 해서 해당 코드 실행하게 하기
-    rclpy.init()
-    node = ExtractKeyword()
-
+def run_flower_logic(node):
+    
     try:
         while True:
         # 꽃 키워드 추출
@@ -179,7 +174,7 @@ def main():
                 # 해바라기: 졸업 1개월이내
                 # 튤립 : 축하 4-6개월
                 if keyword is None:
-                    print("목적이나 기간 정보가 빠진 듯합니다. 한 번 더 말씀해주세요.")
+                    node.get_logger().info("목적이나 기간 정보가 빠진 듯합니다.")
                     time.sleep(3.0)
 
             object = keyword[0][0]         # 축하
@@ -196,27 +191,46 @@ def main():
                 app = FlowerApp(flower, node)
                 app.run()
                 if app.redo:    # 재선택
-                    print("다시 선택합니다.")
+                    node.get_logger().info("다시 선택합니다.")
                     continue    
                 else:           # 꽃 선택
-                    print("선택 완료.")
+                    node.get_logger().info("선택 완료.")
                     break  
             else:
-                print("GUI를 실행시키지 못했습니다.")
+                node.get_logger().error("GUI를 실행시키지 못했습니다.")
                 break
+    except Exception as e:
+        node.get_logger().error(f"Error in main flow: {e}")
     finally:
         node.destroy_node()
         rclpy.shutdown()
 
+def main():
+## command를 sub 해서 해당 코드 실행하게 하기
+    rclpy.init()
+    node = ExtractKeyword()
 
-if __name__ == "__main__":
-    main()
+    thread = threading.Thread(target=rclpy.spin, args=(node,), daemon=True)
+    thread.start()
+
+    node.get_logger().info('Waiting for CMD 1...')
+    node.cmd_received.wait()
+    node.get_logger().info('Command 1 received, now starting main flow')
+
+    # cmd_received 발생 후 run_flower_logic 수행
+    run_flower_logic(node)
+
+    node.destroy_node()
+    rclpy.shutdown()
+    thread.join()
 
 
-# def run_flower_logic():
+
+# def main():
+# ## command를 sub 해서 해당 코드 실행하게 하기
 #     rclpy.init()
 #     node = ExtractKeyword()
-    
+
 #     try:
 #         while True:
 #         # 꽃 키워드 추출
@@ -252,27 +266,10 @@ if __name__ == "__main__":
 #             else:
 #                 print("GUI를 실행시키지 못했습니다.")
 #                 break
-#     except Exception as e:
-#         node.get_logger().error(f"Error in main flow: {e}")
 #     finally:
 #         node.destroy_node()
 #         rclpy.shutdown()
 
-# def main():
-# ## command를 sub 해서 해당 코드 실행하게 하기
-#     rclpy.init()
-#     node = ExtractKeyword()
 
-#     thread = threading.Thread(target=rclpy.spin, args=(node,))
-#     thread.start()
-
-#     node.get_logger().info('Waiting for CMD 1...')
-#     node.cmd_received.wait()
-#     node.get_logger().info('Command 1 received, now starting main flow')
-
-#     # cmd_received 발생 후 run_flower_logic 수행
-#     run_flower_logic()
-
-#     node.destroy_node()
-#     rclpy.shutdown()
-#     thread.join()
+# if __name__ == "__main__":
+#     main()

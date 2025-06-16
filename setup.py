@@ -33,6 +33,7 @@ setup(
             'water = bloom_for_you.watering_scheduler:main',            
             'gui_test = bloom_for_you.gui_test:main',
             # 'pub_test = bloom_for_you.pub_test:main',
+            'juntae_pub = bloom_for_you.juntae_pub:main',
         ],
     },
 )
