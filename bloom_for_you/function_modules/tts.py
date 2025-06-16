@@ -13,12 +13,18 @@ import tempfile
 from gtts import gTTS
 import os
 import subprocess
-#추가
-from .stt import stt
-
 # from playsound import playsound
-def make_txt(prompt, input_list):
-    return prompt +input_list
+def make_txt(template:str, input_list:list) -> str:
+    '''
+    템플릿 문자열에 입력값들을 채워 문장을 생성
+
+    in: 
+        template (str): 포맷팅 문자열 (예: "안녕하세요, {}님. 오늘은 {}을(를) 하실 건가요?")
+        input_list (list): 템플릿에 채워 넣을 값들의 리스트 (예: ["지민", "공부"])
+    out: 
+        입력값이 채워진 완성된 문장
+    '''
+    return template.format(*input_list)
 
 def tts(text:str):
     text = text
@@ -43,8 +49,3 @@ def tts(text:str):
 if __name__ == "__main__":
     # TTS 테스트
     tts("안녕하세요, STT 테스트를 시작하겠습니다.")
-
-    # STT 테스트
-    print("STT 테스트, 말을 시작하세요...")
-    result = stt(duration=5)
-    print("인식된 문장:", result)
