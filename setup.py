@@ -23,6 +23,7 @@ setup(
             'flower_recommender = bloom_for_you.flower_recommender:main',
             'pub_test = bloom_for_you.publisher_test:main',
             'sub_test = bloom_for_you.subscriber_test:main',
+            'scenario_manager = bloom_for_you.scenario_manager:main',
         ],
     },
 )

@@ -1,13 +1,13 @@
 import rclpy
 from rclpy.node import Node
-from bloom_for_you_interfaces.msg import Command
+from bloom_for_you_interfaces.msg import command
 
 
 class CommandSubscriber(Node):
     def __init__(self):
         super().__init__('command_subscriber')
         self.subscription = self.create_subscription(
-            Command,
+            command,
             'command_topic',
             self.listener_callback,
             10
