@@ -10,7 +10,7 @@ import os
 samplerate = 16000
 
 
-def stt(duration=5, openai_api_key=None) -> str:
+def stt(openai_api_key=None, duration=5) -> str:
     '''
     마이크로부터 지정한 시간만큼 음성을 녹음한 후,
     OpenAI Whisper API를 이용해 텍스트로 변환합니다.
