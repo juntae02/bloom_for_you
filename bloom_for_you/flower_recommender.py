@@ -7,12 +7,13 @@ from langchain.chat_models import ChatOpenAI
 import warnings
 import time
 import json
+import threading
 
 from langchain.prompts import PromptTemplate
 from std_msgs.msg import Int32
 from bloom_for_you.function_modules.keyword_extraction import keyword_extraction
 from bloom_for_you.function_modules.tts import tts
-from bloom_for_you_interfaces.msg import Command, FlowerInfo
+from bloom_for_you_interfaces.msg import FlowerInfo
 
 from kivy.app import App
 from kivy.uix.image import Image
@@ -26,11 +27,19 @@ prompt_path = "/home/juntae02/ros2_ws/src/bloom_for_you/resource/recommender_pro
 json_path = "/home/juntae02/ros2_ws/src/bloom_for_you/resource/flower_recommendations.json"
 font_path = "/home/juntae02/ros2_ws/src/bloom_for_you/resource/font/NanumGothic-Regular.ttf"
 
+CMD_RMD = 1 # 꽃 추천 노드 실행
 
 ## 꽃 추천 클래스
 class ExtractKeyword(Node):
     def __init__(self):
         super().__init__('extract_keyword_node')
+    #     self.cmd_received = threading.Event()
+    #     self.subscription = self.create_subscription(FlowerInfo, 'flower_info', self.cmd_callback, 10)
+
+    # def cmd_callback(self, msg):
+    #     if msg.command == CMD_RMD:
+    #         self.get_logger().info('Command 1 received, triggering main.')
+    #         self.cmd_received.set()
 
     def extract_keyword(self):
         response = keyword_extraction(prompt_path)
@@ -126,12 +135,14 @@ class FlowerApp(App):
 
         return layout
     
-## 재선택시, 추가적인 정보를 더 물어보는 것도 ㄱㅊ, but 시나리오 상에 다운로드 받을 이미지가 많아짐
+## 재선택시, 추가적인 정보를 더 물어보는 것도 ㄱㅊ, 
+# but 시나리오 상에 다운로드 받을 이미지가 많아짐
     def on_select(self, instance):
         print("선택되었습니다.")
 
         msg = FlowerInfo()
         msg.id = 123  # sub 받으면 수정
+        msg.command = 2
         msg.flower_name = self.flower['flower_name']
         msg.flower_meaning = self.flower['flower_meaning']
         msg.growth_duration_days = self.flower['growth_duration_days']
@@ -140,6 +151,7 @@ class FlowerApp(App):
 
         self.publisher.publish(msg)
         self.node.get_logger().info('전송 완료')
+        time.sleep(3.0)
 
         self.redo = False
         App.get_running_app().stop()
@@ -148,6 +160,8 @@ class FlowerApp(App):
         print("재선택되었습니다.")
         self.redo = True
         App.get_running_app().stop()
+
+
 
 
 def main():
@@ -162,6 +176,8 @@ def main():
             while keyword is None:
 ## 여기에 로봇이 선물 목적과 남은 기간을 묻는 부분 추가 
                 keyword = node.extract_keyword()     
+                # 해바라기: 졸업 1개월이내
+                # 튤립 : 축하 4-6개월
                 if keyword is None:
                     print("목적이나 기간 정보가 빠진 듯합니다. 한 번 더 말씀해주세요.")
                     time.sleep(3.0)
@@ -195,3 +211,68 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# def run_flower_logic():
+#     rclpy.init()
+#     node = ExtractKeyword()
+    
+#     try:
+#         while True:
+#         # 꽃 키워드 추출
+#             keyword = None
+#             while keyword is None:
+# ## 여기에 로봇이 선물 목적과 남은 기간을 묻는 부분 추가 
+#                 keyword = node.extract_keyword()     
+#                 # 해바라기: 졸업 1개월이내
+#                 # 튤립 : 축하 4-6개월
+#                 if keyword is None:
+#                     print("목적이나 기간 정보가 빠진 듯합니다. 한 번 더 말씀해주세요.")
+#                     time.sleep(3.0)
+
+#             object = keyword[0][0]         # 축하
+#             destination = keyword[1][0]    # 1개월이내
+# # tts(object) # 읽어주는 과정
+
+#         # json 파일과 꽃 키워드 매칭
+#             with open(json_path, 'r') as f:
+#                 flower_data = json.load(f)
+
+#             flower = node.find_flower(flower_data, object, destination)
+
+#             if flower:
+#                 app = FlowerApp(flower, node)
+#                 app.run()
+#                 if app.redo:    # 재선택
+#                     print("다시 선택합니다.")
+#                     continue    
+#                 else:           # 꽃 선택
+#                     print("선택 완료.")
+#                     break  
+#             else:
+#                 print("GUI를 실행시키지 못했습니다.")
+#                 break
+#     except Exception as e:
+#         node.get_logger().error(f"Error in main flow: {e}")
+#     finally:
+#         node.destroy_node()
+#         rclpy.shutdown()
+
+# def main():
+# ## command를 sub 해서 해당 코드 실행하게 하기
+#     rclpy.init()
+#     node = ExtractKeyword()
+
+#     thread = threading.Thread(target=rclpy.spin, args=(node,))
+#     thread.start()
+
+#     node.get_logger().info('Waiting for CMD 1...')
+#     node.cmd_received.wait()
+#     node.get_logger().info('Command 1 received, now starting main flow')
+
+#     # cmd_received 발생 후 run_flower_logic 수행
+#     run_flower_logic()
+
+#     node.destroy_node()
+#     rclpy.shutdown()
+#     thread.join()

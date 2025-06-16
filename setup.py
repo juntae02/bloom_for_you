@@ -24,10 +24,12 @@ setup(
     entry_points={
         'console_scripts': [
             'flower_recommender = bloom_for_you.flower_recommender:main',
+            'seed_planting = bloom_for_you.seed_planting:main',
             'pub_test = bloom_for_you.publisher_test:main',
             'sub_test = bloom_for_you.subscriber_test:main',
             'test = bloom_for_you.test:main',
             'gui_test = bloom_for_you.gui_test:main',
+            'pub_test = bloom_for_you.pub_test:main',
         ],
     },
 )
