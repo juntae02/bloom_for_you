@@ -76,7 +76,7 @@ class ScenarioManager:
     def run_scenario(self):
         print("hello", self.i)
         self.i +=1
-        
+
 def main():
     rclpy.init()
     node = rclpy.create_node('scenario_manager', namespace=robot_util.ROBOT_ID)
@@ -142,15 +142,21 @@ def main():
             # 노드 테스트
             # scenario_manager.run_scenario()
             
+            # move 테스트
+            pos_test1 = [300, 0, 300, 0, 180, 0]
+            pos_test2 = [300, 0, 250, 0, 180, 0]
+            pos_test3 = [100, 0, 0, 0, 0, 0]
+            
             # move 테스트 1
-            # pos_test1 = [300, 0, 300, 0, 180, 0]
-            # pos_test2 = [300, 0, 250, 0, 180, 0]
+            # movel(posx(pos_test1), 60, 60)
+            # movel(posx(pos_test2), 60, 60)
             
             # move 테스트 2
             # scenario_manager.mover.move(pos_test1)
             # scenario_manager.mover.move(pos_test2)
-            # movel(posx(pos_test1), 60, 60)
-            # movel(posx(pos_test2), 60, 60)
+            
+            # move 테스트 3
+            # scenario_manager.mover.move_relative(pos_test3)
             
             # 그리퍼 테스트
             # print("close")
@@ -159,6 +165,12 @@ def main():
             # scenario_manager.gripper.open_grip()
             
             # forcer 테스트
+            # time.sleep(5.0)
+            # scenario_manager.forcer.force_on_z(20)
+            # time.sleep(5.0)
+            # scenario_manager.forcer.force_off()
+            # time.sleep(5.0)
+            # scenario_manager.mover.move_home()
 
     except KeyboardInterrupt:
         scenario_manager.forcer.force_off()

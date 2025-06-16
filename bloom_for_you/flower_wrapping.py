@@ -61,6 +61,12 @@ class FlowerWrapping(Node):
             return
         
         self.id = msg.id
+        self.flower_name = msg.flower_name
+        self.flower_meaning = msg.flower_meaning
+        self.growth_duration_days = msg.growth_duration_days
+        self.watering_cycle = msg.watering_cycle
+        self.growth_state = msg.growth_state
+
         tts("포장을 시작합니다.")
         self.get_logger().info("포장을 시작합니다.")
 
@@ -88,9 +94,15 @@ class FlowerWrapping(Node):
         self._request_card_print()
 
     def _request_card_print(self):
-        msg = Command()
+        msg = FlowerInfo()
         msg.id = self.id
         msg.command = CMD_PRINT_CARD
+        msg.flower_name = self.flower_name
+        msg.flower_meaning = self.flower_meaning
+        msg.growth_duration_days = self.growth_duration_days
+        msg.watering_cycle = self.watering_cycle
+        msg.growth_state = self.growth_state
+        
         self.qr_pub.publish(msg)
         self.get_logger().info("카드를 출력중입니다...")
         time.sleep(3)  # 추후: 서비스 응답 대기로 교체

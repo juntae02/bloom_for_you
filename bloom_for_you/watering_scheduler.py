@@ -8,6 +8,8 @@ import numpy as np
 import rclpy
 from rclpy.node import Node
 import DR_init
+from pathlib import Path
+from ultralytics import YOLO
 
 from bloom_for_you.function_modules.tts import tts
 from bloom_for_you.function_modules.onrobot import RG
@@ -15,7 +17,7 @@ from bloom_for_you.function_modules.onrobot import RG
 from bloom_for_you.function_modules.realsense import ImgNode
 from bloom_for_you.function_modules.yolo import YoloModel
 
-from bloom_for_you_interfaces.msg import Command
+from bloom_for_you_interfaces.msg import FlowerInfo
 
 # for single robot
 # ROBOT_ID = "dsr01"
@@ -51,29 +53,65 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 # package_path = "/home/rokey/r2_ws/src/bloom_for_you"
 package_path = os.path.abspath(os.path.join(current_dir, ".."))
 
+YOLO_MODEL_FILENAME = "growth.pt"
+YOLO_CLASS_NAME_JSON = "class_name_growth.json"
+
+YOLO_MODEL_PATH = os.path.join(package_path, "resource", YOLO_MODEL_FILENAME)
+YOLO_JSON_PATH = os.path.join(package_path, "resource", YOLO_CLASS_NAME_JSON)
+
+
 CMD_START_WATERING = 5
+CMD_CHECK_GROWTH_COMPLETE = 6
 
 POS_ID = []
 POS_WATER = []
 POS_TABLE = []
 POS_SUPPORT_ZONE = []
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-# package_path = "/home/rokey/r2_ws/src/bloom_for_you"
-package_path = os.path.abspath(os.path.join(current_dir, ".."))
 
 class FlowerWatering(Node):
     def __init__(self):
         super().__init__("watering_node")
-        self.cmd_sub = self.create_subscription(Command, 'Command', self.water_the_flower, 10)
+        self.cmd_sub = self.create_subscription(FlowerInfo, 'flowerinfo', self.water_the_flower, 10)
+        self.growth_pub = self.create_publisher(FlowerInfo, 'flowerinfo', 10)
+
         self.img_node = ImgNode()
+        self.intrinsics = self._wait_for_valid_data(
+            self.img_node.get_camera_intrinsic, "camera intrinsics"
+        )
+
+        if not os.path.exists(YOLO_MODEL_PATH):
+            print(f"File not found: {YOLO_MODEL_PATH}")
+            exit(1)
+
+        suffix = Path(YOLO_MODEL_PATH).suffix.lower()
+
+        if suffix == '.pt':
+            model = YOLO(YOLO_MODEL_PATH)
+        elif suffix in ['.onnx', '.engine']:
+            model = YOLO(YOLO_MODEL_PATH, task='detect')
+        else:
+            print(f"Unsupported model format: {suffix}")
+            exit(1)
+
+    def _load_model(self, name):
+        """모델 이름에 따라 인스턴스를 반환합니다."""
+        if name.lower() == 'yolo':
+            return YoloModel()
+        raise ValueError(f"Unsupported model: {name}")
         
     def water_the_flower(self, msg):
         self.command = msg.command
         if self.command != CMD_START_WATERING:
             return
-        
+    
         self.id = msg.id
+        self.flower_name = msg.flower_name
+        self.flower_meaning = msg.flower_meaning
+        self.growth_duration_days = msg.growth_duration_days
+        self.watering_cycle = msg.watering_cycle
+        self.growth_state = msg.growth_state
+
 
         tts("물 주기를 시작합니다.")
         self.get_logger().info("물 주기 시작")
@@ -92,6 +130,24 @@ class FlowerWatering(Node):
         self._check_growth()
 
     def _check_growth(self):
+        msg = FlowerInfo()
+        msg.id = self.id
+        msg.command = CMD_CHECK_GROWTH_COMPLETE
+        msg.flower_name = self.flower_name
+        msg.flower_meaning = self.flower_meaning
+        msg.growth_duration_days = self.growth_duration_days
+        msg.watering_cycle = self.watering_cycle
+
+        rclpy.spin_once(self.img_node)
+
+        self.model.get_best_detection(self.img_node, )
+
+        
+        grow_state = 1
+        self.growth_state=grow_state
+        msg.growth_state = self.growth_state
+
+        self.growth_pub.publish(msg)
         self._take_pictures()
 
     def _take_pictures(self):
@@ -114,6 +170,8 @@ class FlowerWatering(Node):
     def _return_flower(self):
         tts("물 주기를 완료하였습니다.")
         self.get_logger().info("물 주기 완료")
+
+    
 
 def main(args=None):
     rclpy.init(args=args)
