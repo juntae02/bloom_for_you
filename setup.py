@@ -5,7 +5,7 @@ package_name = 'bloom_for_you'
 setup(
     name=package_name,
     version='0.0.0',
-    packages=find_packages(include=[package_name]),
+    packages=find_packages(include=[package_name, package_name + '.*']),
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
@@ -25,10 +25,14 @@ setup(
         'console_scripts': [
             'scenario_manager = bloom_for_you.scenario_manager:main',
             'flower_recommender = bloom_for_you.flower_recommender:main',
+            'seed_planting = bloom_for_you.seed_planting:main',
+            'pub_test = bloom_for_you.publisher_test:main',
+            'sub_test = bloom_for_you.subscriber_test:main',
             'test = bloom_for_you.test:main',
             'wrap = bloom_for_you.flower_wrapping:main',
             'water = bloom_for_you.watering_scheduler:main',            
             'gui_test = bloom_for_you.gui_test:main',
+            'juntae_pub = bloom_for_you.juntae_pub:main',
             
             'robot_test = bloom_for_you.robot_test:main',
         ],

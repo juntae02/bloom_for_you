@@ -15,7 +15,7 @@ PKG_ROOT = os.path.abspath(os.path.join(BASE_DIR, "..", ".."))
 openai.api_key = os.getenv("OPENAI_API_KEY")
 # ───────────────────────────────
 
-def stt(openai_api_key=None, duration=5):
+def stt(openai_api_key=None, duration=5) -> str:
     if openai_api_key is None:
         openai_api_key = os.getenv("OPENAI_API_KEY")    # 이 줄은 그대로 두셔도 됩니다
         if openai_api_key is None:
