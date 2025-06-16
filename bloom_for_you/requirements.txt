@@ -3,4 +3,5 @@ sounddevice
 wavio
 pyttsx3
 numpy
+gTTS
 requests
