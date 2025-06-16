@@ -27,7 +27,7 @@ def _get_prompt(file_name: str) -> str:
     with open(file_path, "r", encoding="utf-8") as f:
         return f.read()
 
-def keyword_extraction(prompt_path, duration=5, openai_api_key=None):
+def keyword_extraction(prompt_path, openai_api_key=None, duration=5):
     '''
     마이크로부터 지정한 시간만큼 음성을 녹음한 후,
     Whisper API로 텍스트로 변환하고, 변환된 텍스트를 GPT에 전달하여 키워드를 추출합니다.

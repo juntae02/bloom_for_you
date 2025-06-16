@@ -5,7 +5,7 @@ package_name = 'bloom_for_you'
 setup(
     name=package_name,
     version='0.0.0',
-    packages=find_packages(include=[package_name]),
+    packages=find_packages(include=[package_name, package_name + '.*']),
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
@@ -32,7 +32,7 @@ setup(
             'wrap = bloom_for_you.flower_wrapping:main',
             'water = bloom_for_you.watering_scheduler:main',            
             'gui_test = bloom_for_you.gui_test:main',
-            'pub_test = bloom_for_you.pub_test:main',
+            # 'pub_test = bloom_for_you.pub_test:main',
         ],
     },
 )
