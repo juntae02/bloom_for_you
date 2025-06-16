@@ -20,10 +20,13 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'scenario_manager = bloom_for_you.scenario_manager:main',
             'flower_recommender = bloom_for_you.flower_recommender:main',
             'pub_test = bloom_for_you.publisher_test:main',
             'sub_test = bloom_for_you.subscriber_test:main',
-            'scenario_manager = bloom_for_you.scenario_manager:main',
+            'test = bloom_for_you.test:main',
+            'wrap = bloom_for_you.flower_wrapping:main',
+            'water = bloom_for_you.watering_scheduler:main',            
         ],
     },
 )
