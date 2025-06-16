@@ -43,3 +43,9 @@ def tts(text:str):
         )
     finally:
         os.remove(temp_mp3_path)  # 재생 후 임시 파일 삭제
+#추가
+
+# 필요하다면 tts.py 안에서 바로 이렇게 호출도 가능합니다:
+if __name__ == "__main__":
+    # TTS 테스트
+    tts("안녕하세요, STT 테스트를 시작하겠습니다.")

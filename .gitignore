@@ -242,3 +242,5 @@ AMENT_IGNORE
 .vscode
 
 personal_folder/*
+
+bloom_for_you.egg-info
