@@ -7,7 +7,7 @@ import requests
 
 import re
 from bloom_for_you.function_modules.tts import tts
-from bloom_for_you.function_modules.stt import stt
+from bloom_for_you.function_modules.stt import stt_with_save
 import bloom_for_you.function_modules.config as config
 
 from datetime import datetime
@@ -25,7 +25,7 @@ def authenticate() -> str | None:
     attempts = 0
     while attempts < 2:
         tts("예약번호를 말씀해주세요")
-        raw = stt(duration=5)
+        raw = stt_with_save(duration=5)
         log_voice_msg(f"인증 시도 - 원문 인식: {raw}")
 
         res_num = "".join(re.findall(r"\d", raw))
@@ -59,7 +59,7 @@ def main():
     tts("문장을 남겨주세요")
     log_voice_msg("문장을 저장중..")
     log_voice_msg("마이크를 정면으로 바라보고 5초간 말씀해주세요")
-    message = stt(duration=5)
+    message = stt_with_save(duration=5)
     log_voice_msg(f"인식된 문장: {message}")
 
     # 4) NumPy로 로컬 저장 (optional, 서버에서 JSON만 써도 OK)

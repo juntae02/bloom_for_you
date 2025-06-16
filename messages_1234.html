@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang='ko'>
+<head>
+  <meta charset='utf-8'>
+  <title>예약번호 1234님의 메시지</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      /* 꽃 배경 */
+      background: url('/static/images/flower.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+    .top-right {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      z-index: 2;
+    }
+    .center-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      /* 메시지 가독성 위해 반투명 박스 */
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 12px;
+      margin: 30px;
+      padding: 20px;
+    }
+    h1 { font-size: 2rem; margin-bottom: 30px; }
+    ul { list-style: none; padding: 0; }
+    li { margin-bottom: 20px; }
+    audio { margin-top: 5px; }
+    a { color: #3b5998; text-decoration: none; font-weight: bold; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class='top-right'><a href='/'>다른 예약번호 조회</a></div>
+  <div class='center-content'>
+    <h1>예약번호 1234님의 메시지</h1>
+    <ul>
+      <li>[20250616_153858] ㅈㄴ 힘들어<br><audio controls src='/static/audio/1234/20250616_153858.wav'></audio></li>
+      <li>[20250616_162729] 힘들다, 야<br><audio controls src='/static/audio/1234/20250616_162729.wav'></audio></li>
+    </ul>
+  </div>
+</body>
+</html>
