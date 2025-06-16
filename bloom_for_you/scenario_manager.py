@@ -159,6 +159,12 @@ def main():
             # scenario_manager.gripper.open_grip()
             
             # forcer 테스트
+            # time.sleep(5.0)
+            # scenario_manager.forcer.force_on_z(20)
+            # time.sleep(5.0)
+            # scenario_manager.forcer.force_off()
+            # time.sleep(5.0)
+            # scenario_manager.mover.move_home()
 
     except KeyboardInterrupt:
         scenario_manager.forcer.force_off()
