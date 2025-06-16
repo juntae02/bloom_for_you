@@ -31,6 +31,8 @@ setup(
             'wrap = bloom_for_you.flower_wrapping:main',
             'water = bloom_for_you.watering_scheduler:main',            
             'gui_test = bloom_for_you.gui_test:main',
+            
+            'robot_test = bloom_for_you.robot_test:main',
         ],
     },
 )
