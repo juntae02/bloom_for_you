@@ -1,6 +1,15 @@
 from setuptools import find_packages, setup
+from glob import glob
+import os
 
 package_name = 'bloom_for_you'
+
+
+resource_files = [
+    (os.path.join('share', package_name, os.path.dirname(path)), [path])
+    for path in glob('resource/**/*', recursive=True)
+    if os.path.isfile(path)
+]
 
 setup(
     name=package_name,
@@ -10,7 +19,8 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-    ],
+        
+    ]+ resource_files,  # ✅ resource 전체 추가
     install_requires=[
         'setuptools',
         'bloom_for_you_interfaces'  # 추가: 인터페이스 패키지 의존성

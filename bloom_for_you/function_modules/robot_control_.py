@@ -7,7 +7,7 @@ import rclpy
 from rclpy.node import Node
 import DR_init
 
-from od_msg.srv import SrvDepthPosition
+from bloom_for_you_interfaces.srv import SrvDepthPosition
 from std_srvs.srv import Trigger
 from ament_index_python.packages import get_package_share_directory
 from robot_control.onrobot import RG
@@ -26,12 +26,7 @@ DEPTH_OFFSET = -5.0
 MIN_DEPTH = 2.0
 
 
-DR_init.__dsr__id = ROBOT_ID
-DR_init.__dsr__model = ROBOT_MODEL
-
-rclpy.init()
-dsr_node = rclpy.create_node("robot_control_node", namespace=ROBOT_ID)
-DR_init.__dsr__node = dsr_node
+from bloom_for_you.function_modules import robot
 
 try:
     from DSR_ROBOT2 import movej, movel, get_current_posx, mwait, trans
@@ -49,20 +44,21 @@ gripper = RG(GRIPPER_NAME, TOOLCHARGER_IP, TOOLCHARGER_PORT)
 
 class RobotController(Node):
     def __init__(self):
+        print("aaaa")
         super().__init__("pick_and_place")
-        self.init_robot()
+        print("bbbb")
+        self.robot_instance= robot.Robot()
+        print("cccc")
 
         self.get_position_client = self.create_client(
             SrvDepthPosition, "/get_3d_position"
         )
+        print("dddd")
         while not self.get_position_client.wait_for_service(timeout_sec=3.0):
             self.get_logger().info("Waiting for get_depth_position service...")
+        print("eeee")
         self.get_position_request = SrvDepthPosition.Request()
-
-        self.get_keyword_client = self.create_client(Trigger, "/get_keyword")
-        while not self.get_keyword_client.wait_for_service(timeout_sec=3.0):
-            self.get_logger().info("Waiting for get_keyword service...")
-        self.get_keyword_request = Trigger.Request()
+        
 
     def get_robot_pose_matrix(self, x, y, z, rx, ry, rz):
         R = Rotation.from_euler("ZYZ", [rx, ry, rz], degrees=True).as_matrix()
@@ -88,29 +84,32 @@ class RobotController(Node):
 
         return td_coord[:3]
 
-    def robot_control(self):
-        target_list = []
-        self.get_logger().info("call get_keyword service")
-        self.get_logger().info("say 'Hello Rokey' and speak what you want to pick up")
-        get_keyword_future = self.get_keyword_client.call_async(self.get_keyword_request)
-        rclpy.spin_until_future_complete(self, get_keyword_future)
-        if get_keyword_future.result().success:
-            get_keyword_result = get_keyword_future.result()
-
-            target_list = get_keyword_result.message.split()
-
-            for target in target_list:
-                target_pos = self.get_target_pos(target)
-                if target_pos is None:
-                    self.get_logger().warn("No target position")
-                else:
-                    self.get_logger().info(f"target position: {target_pos}")
-                    self.pick_and_place_target(target_pos)
-                    self.init_robot()
-
+    def robot_control(self, grip_target, z_move):
+        self.get_logger().info("robot control start")
+        
+        target_pos = self.get_target_pos(grip_target)
+        # target_pos = [300, 0, 250, 0, 180, 0]
+        self.get_logger().info("==============")
+        # self.get_logger().info(target_pos)
+        self.get_logger().info("hhhh")
+        self.robot_instance.open_grip()
+        self.robot_instance.move_home()
+        
+        if target_pos is None:
+            self.get_logger().info("iiii")
+            self.get_logger().warn("No target position")
         else:
-            self.get_logger().warn(f"{get_keyword_result.message}")
-            return
+            self.get_logger().info("jjjj")
+            target_pos[2] = target_pos[2] + z_move
+            self.get_logger().info(f"target position: {target_pos}")
+            self.robot_instance.move(target_pos)
+            self.robot_instance.close_grip()
+            time.sleep(2.0)
+            self.robot_instance.move_home()
+            self.robot_instance.open_grip()
+            
+            # time.sleep(2.0)
+            # self.robot_instance.close_grip()
 
     def get_target_pos(self, target):
         self.get_position_request.target = target
@@ -130,31 +129,27 @@ class RobotController(Node):
             gripper2cam_path = os.path.join(
                 package_path, "resource", "T_gripper2camera.npy"
             )
+            self.get_logger().info(f"=========== gripper cam path ===========: {gripper2cam_path}")
             robot_posx = get_current_posx()[0]
             td_coord = self.transform_to_base(result, gripper2cam_path, robot_posx)
+            self.get_logger().info("ffff")
 
             if td_coord[2] and sum(td_coord) != 0:
                 td_coord[2] += DEPTH_OFFSET  # DEPTH_OFFSET
                 td_coord[2] = max(td_coord[2], MIN_DEPTH)  # MIN_DEPTH: float = 2.0
-
+            self.get_logger().info("gggg")
             target_pos = list(td_coord[:3]) + robot_posx[3:]
         return target_pos
 
-    def init_robot(self):
-        JReady = [0, 0, 90, 0, 90, 0]
-        movej(JReady, vel=VELOCITY, acc=ACC)
-        gripper.open_gripper()
-        mwait()
+def main(args=None):
+    node = RobotController()
+    
+    while rclpy.ok():
+        x = input("input target")
+        node.robot_control(x, -5)
+    rclpy.shutdown()
+    node.destroy_node()
 
-    def pick_and_place_target(self, target_pos):
-        movel(target_pos, vel=VELOCITY, acc=ACC)
-        mwait()
-        gripper.close_gripper()
 
-        while gripper.get_status()[0]:
-            time.sleep(0.5)
-        mwait()
-
-        gripper.open_gripper()
-        while gripper.get_status()[0]:
-            time.sleep(0.5)
+if __name__ == "__main__":
+    main()

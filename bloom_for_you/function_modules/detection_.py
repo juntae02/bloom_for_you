@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import rclpy
 from rclpy.node import Node
@@ -20,11 +21,13 @@ class ObjectDetectionNode(Node):
         self.intrinsics = self._wait_for_valid_data(
             self.img_node.get_camera_intrinsic, "camera intrinsics"
         )
+        self.get_logger().info("============= make service =============")
         self.create_service(
             SrvDepthPosition,
             'get_3d_position',
             self.handle_get_depth
         )
+        self.get_logger().info("============= make service done =============")
         self.get_logger().info("ObjectDetectionNode initialized.")
 
     def handle_get_depth(self, request, response):
@@ -78,20 +81,23 @@ class ObjectDetectionNode(Node):
         )
 
 
-# def main(args=None):
-#     if not rclpy.ok():
-#         rclpy.init()
+def main(args=None):
+    if not rclpy.ok():
+        rclpy.init()
+        
+    model_path = os.path.expanduser('~/rokey_ws/src/bloom_for_you/resource/models_and_json/example_model.pt')
+    json_path = os.path.expanduser('~/rokey_ws/src/bloom_for_you/resource/models_and_json/example_json.json')
+    
+    # 모델 인스턴스를 직접 생성해서 전달
+    model = YoloModel(pt_path=model_path, json_path=json_path)
+    node = ObjectDetectionNode(model=model)
 
-#     # 모델 인스턴스를 직접 생성해서 전달
-#     model = YoloModel(weights_path='/home/user/my_model/best.pt')
-#     node = ObjectDetectionNode(model=model)
-
-#     try:
-#         rclpy.spin(node)
-#     finally:
-#         node.destroy_node()
-#         rclpy.shutdown()
+    try:
+        rclpy.spin(node)
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
 
 
-# if __name__ == '__main__':
-#     main()
+if __name__ == '__main__':
+    main()
