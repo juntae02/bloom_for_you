@@ -10,9 +10,11 @@ def main(args=None):
     robot_instance = robot.Robot()
     while (1):
         robot_instance.move_home()
-        x = input("타겟")
-        y = int(input("높이"))
-        yolo_instance.grip_target(x, y)
+        target = input("타겟")
+        x = int(input("x"))
+        y = int(input("y"))
+        z = int(input("z"))
+        yolo_instance.grip_target(target,x, y,z)
 
     rclpy.shutdown()
 

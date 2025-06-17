@@ -88,6 +88,9 @@ def main(args=None):
     model_path = os.path.join(package_path, 'resource', 'models_and_json', 'flower.pt')
     json_path = os.path.join(package_path, 'resource', 'models_and_json', 'flower.json')
     
+    # model_path = os.path.join(package_path, 'resource', 'models_and_json', 'example_model.pt')
+    # json_path = os.path.join(package_path, 'resource', 'models_and_json', 'example_json.json')
+    
     print(model_path)
     print(json_path)
 
