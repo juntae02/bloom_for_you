@@ -110,6 +110,8 @@ class FlowerWrapping(Node):
         self.robot.move_relative([0,0,20,0,0,0])
         self.robot.close_grip()
         self.robot.move_home()
+
+        self.get_logger().info("화분 픽업 완료")
         
 
 

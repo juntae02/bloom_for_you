@@ -1,6 +1,6 @@
 import os
 import time
-import datetime
+from datetime import datetime
 import cv2
 import sys
 import numpy as np
@@ -25,10 +25,12 @@ package_path = os.path.abspath(os.path.join(current_dir, ".."))
 CMD_START_WATERING = 30
 CMD_END_WATERING = 31
 
-POS_ID = []
-POS_WATER = []
-POS_TABLE = []
-POS_SUPPORT_ZONE = []
+POS_TABLE = [280.28, 63.48, 187.74, 20.24, -179.96, 19.97]
+POS_ZONE1 = [108.99, -461.86, 197.16, 104.45, -178.30, -168.57]
+POS_ZONE2 = [-114.80, -460.45, 197.16, 69.36, 180.00, 163.36]
+POS_PLANT = [POS_TABLE, POS_ZONE1, POS_ZONE2]
+
+POS_WATER = [342.57,-395.48,196.54,117.00,179.98,129.04]
 
 
 class FlowerWatering(Node):
@@ -37,6 +39,7 @@ class FlowerWatering(Node):
         self.cmd_sub = self.create_subscription(FlowerInfo, 'flower_info', self.water_the_flower, 10)
         self.growth_pub = self.create_publisher(FlowerInfo, 'flower_info', 10)
         self.img_node = ImgNode()
+        self.robot = robot.Robot()
 
 
     def water_the_flower(self, msg):
@@ -45,6 +48,7 @@ class FlowerWatering(Node):
             return
     
         self.id = msg.id
+        self.zone_number = msg.zone_number
         self.flower_name = msg.flower_name
         self.flower_meaning = msg.flower_meaning
         self.growth_duration_days = msg.growth_duration_days
@@ -52,21 +56,56 @@ class FlowerWatering(Node):
         self.growth_state = msg.growth_state
 
 
-        tts("물 주기를 시작합니다.")
-        self.get_logger().info("물 주기 시작")
+        tts("물 주기 노드를 시작합니다.")
+        self.get_logger().info("물 주기 노드 시작")
         
         self._get_flower()
+        self._water()
+        self._check_growth()
         
+
+        tts("물 주기 노드를 완료하였습니다.")
+        self.get_logger().info("물 주기 노드 완료")
         
     def _get_flower(self):
         self.get_logger().info("화분 가져오는 중...")
 
-        self._water()
+        self.robot.move_home()
+
+        self.robot.move(POS_PLANT[self.zone_number])
+        self.robot.open_grip()
+        self.robot.move_relative([0,0,-20,0,0,0])
+        self.robot.close_grip()
+        self.robot.move_relative([0,0, 20,0,0,0])
+
+        self.robot.move(POS_PLANT[0])
+        self.robot.move_relative([0,0,-20,0,0,0])
+        self.robot.force_on_z(-10)
+        self.robot.check_touch(max=10)
+        self.robot.force_off()
+
+        self.robot.open_grip()
+        self.robot.move_relative([0,0,20,0,0,0])
+        self.robot.close_grip()
+        self.robot.move_home()
+
+        self.get_logger().info("화분 픽업 완료")
+        
 
     def _water(self):
         self.get_logger().info("물 주기 실행")
+        self.robot.move_home()
+        self.robot.move(POS_WATER)
+        self.robot.open_grip()
+        self.robot.move_relative([0,0,-130,0,0,0])
+        self.robot.close_grip()
+        self.robot.move(POS_WATER)
 
-        self._check_growth()
+        
+        self.robot.move(POS_PLANT[0])
+        
+        self.get_logger().info("물 주기 완료")
+
 
     def _check_growth(self):
         self._take_pictures()
@@ -75,7 +114,7 @@ class FlowerWatering(Node):
         rclpy.spin_once(self.img_node)
         color_image = self.img_node.get_color_frame()
         if color_image is not None:
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            timestamp = datetime.today().strftime('%Y%m%d')
             filename = f"flower_{self.id}_{timestamp}.jpg"
             save_dir= os.path.join(package_path, "resource", "pictures", str(self.id))
             os.makedirs(save_dir, exist_ok=True)
@@ -105,11 +144,10 @@ class FlowerWatering(Node):
         msg.growth_state = self.growth_state
         self.growth_pub.publish(msg)
 
-        tts("물 주기를 완료하였습니다.")
-        self.get_logger().info("물 주기 완료")
+
 
 def main(args=None):
-    rclpy.init(args=args)
+    # rclpy.init(args=args)
     node = FlowerWatering()
     try:
         rclpy.spin_once(node)
