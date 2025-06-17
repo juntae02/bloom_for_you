@@ -13,7 +13,7 @@ PACKAGE_NAME = 'pick_and_place_text'
 PACKAGE_PATH = get_package_share_directory(PACKAGE_NAME)
 
 
-class ObjectDetectionNode(Node):
+class SetYoloModel(Node):
     def __init__(self, model: YoloModel):
         super().__init__('object_detection_node')
         self.img_node = ImgNode()
@@ -21,14 +21,11 @@ class ObjectDetectionNode(Node):
         self.intrinsics = self._wait_for_valid_data(
             self.img_node.get_camera_intrinsic, "camera intrinsics"
         )
-        self.get_logger().info("============= make service =============")
         self.create_service(
             SrvDepthPosition,
             'get_3d_position',
             self.handle_get_depth
         )
-        self.get_logger().info("============= make service done =============")
-        self.get_logger().info("ObjectDetectionNode initialized.")
 
     def handle_get_depth(self, request, response):
         self.get_logger().info(f"Received request: {request}")
@@ -90,7 +87,7 @@ def main(args=None):
     
     # 모델 인스턴스를 직접 생성해서 전달
     model = YoloModel(pt_path=model_path, json_path=json_path)
-    node = ObjectDetectionNode(model=model)
+    node = SetYoloModel(model=model)
 
     try:
         rclpy.spin(node)

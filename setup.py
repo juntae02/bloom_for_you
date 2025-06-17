@@ -43,8 +43,14 @@ setup(
             'water = bloom_for_you.watering_scheduler:main',            
             'gui_test = bloom_for_you.gui_test:main',
             'juntae_pub = bloom_for_you.juntae_pub:main',
+
+            # set code by wsh - "ros2 run before start your code"
+            'set_yolo_model = bloom_for_you.set_yolo_model:main',
+            'set_yolo_robot = bloom_for_you.set_yolo_robot:main',
             
-            'robot_test = bloom_for_you.robot_test:main',
+            # test code by wsh - "how to run module"
+            'test_robot = bloom_for_you.test_robot:main',
+            'test_yolo = bloom_for_you.test_yolo:main',            
         ],
     },
 )
