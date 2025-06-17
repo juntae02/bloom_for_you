@@ -1,28 +1,19 @@
 import rclpy
 from rclpy.node import Node
-from bloom_for_you_interfaces.msg import GripTarget
-
-class UseYolo(Node):
-    def __init__(self):
-        super().__init__('minimal_publisher')
-        self.publisher_ = self.create_publisher(GripTarget, 'grip_target', 10)
-
-    def grip_target(self, target, height):
-        msg = GripTarget()
-        msg.target = target
-        msg.height_z = height
-        self.publisher_.publish(msg)
+from bloom_for_you.function_modules import yolo
+from bloom_for_you.function_modules import robot
 
 def main(args=None):
-    rclpy.init(args=args)
-    use_yolo = UseYolo()
-    import time
+    # rclpy.init(args=args)
+    
+    yolo_instance = yolo.Yolo()
+    robot_instance = robot.Robot()
     while (1):
+        robot_instance.move_home()
         x = input("타겟")
         y = int(input("높이"))
-        use_yolo.grip_target(x,y)
+        yolo_instance.grip_target(x, y)
 
-    use_yolo.destroy_node()
     rclpy.shutdown()
 
 if __name__ == '__main__':

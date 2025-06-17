@@ -10,7 +10,6 @@ from rclpy.node import Node
 # bloom module
 from bloom_for_you.function_modules import robot
 from bloom_for_you.function_modules.realsense_ import ImgNode
-from bloom_for_you.function_modules.yolo_ import YoloModel
 
 # bloom interfaces
 from bloom_for_you_interfaces.srv import SrvDepthPosition

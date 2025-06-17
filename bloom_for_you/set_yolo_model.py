@@ -7,7 +7,7 @@ from typing import Any
 from ament_index_python.packages import get_package_share_directory
 from bloom_for_you_interfaces.srv import SrvDepthPosition
 from bloom_for_you.function_modules.realsense_ import ImgNode
-from bloom_for_you.function_modules.yolo_ import YoloModel
+from bloom_for_you.function_modules.yolo_model_ import YoloModel
 
 PACKAGE_NAME = 'pick_and_place_text'
 PACKAGE_PATH = get_package_share_directory(PACKAGE_NAME)
