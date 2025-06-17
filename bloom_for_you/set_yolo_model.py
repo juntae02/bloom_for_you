@@ -76,15 +76,21 @@ class SetYoloModel(Node):
             (y - ppy) * z / fy,
             z
         )
-
+from ament_index_python.packages import get_package_share_directory
+import os
 
 def main(args=None):
     if not rclpy.ok():
         rclpy.init()
-        
-    model_path = os.path.expanduser('~/rokey_ws/src/bloom_for_you/resource/models_and_json/example_model.pt')
-    json_path = os.path.expanduser('~/rokey_ws/src/bloom_for_you/resource/models_and_json/example_json.json')
+
+    package_path = get_package_share_directory("bloom_for_you")  # 절대 경로로 반환됨
+
+    model_path = os.path.join(package_path, 'resource', 'models_and_json', 'flower.pt')
+    json_path = os.path.join(package_path, 'resource', 'models_and_json', 'flower.json')
     
+    print(model_path)
+    print(json_path)
+
     # 모델 인스턴스를 직접 생성해서 전달
     model = YoloModel(pt_path=model_path, json_path=json_path)
     node = SetYoloModel(model=model)
