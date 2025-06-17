@@ -1,27 +1,16 @@
-# path: bloom_for_you/bloom_for_you/voice_memory.py
-
 import numpy as np
 import requests
-
-# path: bloom_for_you/bloom_for_you/function_modules/auth.py
-
 import re
 from bloom_for_you.function_modules.tts import tts
 from bloom_for_you.function_modules.stt import stt_with_save
 import bloom_for_you.function_modules.config as config
-
 from datetime import datetime
-  
+
 def log_voice_msg(msg: str):
-    """콘솔에 타임스탬프와 함께 출력"""
     ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print(f"[{ts}] {msg}")
 
 def authenticate() -> str | None:
-    """
-    1) 최대 2회까지 예약번호 인증 (stt() 로 통합)
-    2) 성공하면 예약번호(res_num)를 리턴, 아니면 None
-    """
     attempts = 0
     while attempts < 2:
         tts("예약번호를 말씀해주세요")
@@ -42,9 +31,8 @@ def authenticate() -> str | None:
                 tts("두 번 틀리셨습니다. 고객센터로 문의해주세요")
                 return None
 
-
 def main():
-    # 1) 인증 단계: 예약번호를 받아옴
+    # 1) 인증 단계
     res_num = authenticate()
     if not res_num:
         tts("서비스를 종료합니다")
@@ -62,16 +50,22 @@ def main():
     message = stt_with_save(duration=5)
     log_voice_msg(f"인식된 문장: {message}")
 
-    # 4) NumPy로 로컬 저장 (optional, 서버에서 JSON만 써도 OK)
+    # 4) 녹음 파일명 지정 (stt_with_save가 저장하는 파일명과 동일하게!)
+    audio_path = "message.wav"  # ← stt_with_save의 파일명으로 변경 필요!
+    # 만약 stt_with_save가 message.wav로 저장하면 "message.wav"로 변경!
+
+    # 5) NumPy로 로컬 저장 (optional)
     np.save("message.npy", np.array([message], dtype=object))
     log_voice_msg("message.npy로 저장 완료")
 
-    # 5) 로컬 서버에 예약번호·메시지 함께 전송
-    payload = {"status": "saved", "res_num": res_num, "message": message}
+    # 6) 서버에 예약번호·메시지·오디오 파일 form-data로 전송!
     try:
-        resp = requests.post(config.LOCAL_SIGNAL_URL, json=payload)
-        resp.raise_for_status()
-        log_voice_msg("로컬 신호 전송 완료")
+        with open(audio_path, 'rb') as audio_file:
+            files = {'audio': audio_file}
+            data = {'res_num': res_num, 'message': message}
+            resp = requests.post(config.LOCAL_SIGNAL_URL, files=files, data=data)
+            resp.raise_for_status()
+            log_voice_msg("로컬 신호 전송 완료")
     except Exception as e:
         log_voice_msg(f"로컬 신호 전송 실패: {e}")
 
