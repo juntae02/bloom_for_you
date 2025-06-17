@@ -8,7 +8,6 @@ from DR_common2 import posx, posj
 
 class Robot:
     def __init__(self):
-        # super().__init__('drawer_and_eraser', namespace=ROBOT_ID)
 
         self.node = config.g_node
         

@@ -1,51 +1,20 @@
 import os
 import time
-import datetime
+from datetime import datetime
 import cv2
 import sys
-from scipy.spatial.transform import Rotation
 import numpy as np
 import rclpy
 from rclpy.node import Node
-import DR_init
-from pathlib import Path
-from ultralytics import YOLO
 
 from bloom_for_you.function_modules.tts import tts
-from bloom_for_you.function_modules.onrobot import RG
+
+from bloom_for_you.function_modules import robot
 
 from bloom_for_you.function_modules.realsense import ImgNode
 from bloom_for_you.function_modules.yolo import YoloModel
 
 from bloom_for_you_interfaces.msg import FlowerInfo
-
-# for single robot
-# ROBOT_ID = "dsr01"
-# ROBOT_MODEL = "m0609"
-# VELOCITY, ACC = 40, 40
-# GRIPPER_NAME = "rg2"
-# TOOLCHARGER_IP = "192.168.1.1"
-# TOOLCHARGER_PORT = "502"
-# DEPTH_OFFSET = -15.0
-# MIN_DEPTH = 2.0
-
-# DR_init.__dsr__id = ROBOT_ID
-# DR_init.__dsr__model = ROBOT_MODEL
-
-# rclpy.init()
-# dsr_node = rclpy.create_node("robot_control_node", namespace=ROBOT_ID)
-# DR_init.__dsr__node = dsr_node
-
-# try:
-#     from DSR_ROBOT2 import movej, movel, mwait, DR_MV_MOD_REL
-# except ImportError as e:
-#     print(f"Error importing DSR_ROBOT2: {e}")
-#     sys.exit()
-
-########### Gripper Setup. Do not modify this area ############
-
-# gripper = RG(GRIPPER_NAME, TOOLCHARGER_IP, TOOLCHARGER_PORT)
-
 
 ########### FlowerWatering ############
 
@@ -53,59 +22,33 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 # package_path = "/home/rokey/r2_ws/src/bloom_for_you"
 package_path = os.path.abspath(os.path.join(current_dir, ".."))
 
-YOLO_MODEL_FILENAME = "growth.pt"
-YOLO_CLASS_NAME_JSON = "class_name_growth.json"
+CMD_START_WATERING = 30
+CMD_END_WATERING = 31
 
-YOLO_MODEL_PATH = os.path.join(package_path, "resource", YOLO_MODEL_FILENAME)
-YOLO_JSON_PATH = os.path.join(package_path, "resource", YOLO_CLASS_NAME_JSON)
+POS_TABLE = [280.28, 63.48, 187.74, 20.24, -179.96, 19.97]
+POS_ZONE1 = [108.99, -461.86, 197.16, 104.45, -178.30, -168.57]
+POS_ZONE2 = [-114.80, -460.45, 197.16, 69.36, 180.00, 163.36]
+POS_PLANT = [POS_TABLE, POS_ZONE1, POS_ZONE2]
 
-
-CMD_START_WATERING = 5
-CMD_CHECK_GROWTH_COMPLETE = 6
-
-POS_ID = []
-POS_WATER = []
-POS_TABLE = []
-POS_SUPPORT_ZONE = []
+POS_WATER = [342.57,-395.48,196.54,117.00,179.98,129.04]
 
 
 class FlowerWatering(Node):
     def __init__(self):
         super().__init__("watering_node")
-        self.cmd_sub = self.create_subscription(FlowerInfo, 'flowerinfo', self.water_the_flower, 10)
-        self.growth_pub = self.create_publisher(FlowerInfo, 'flowerinfo', 10)
-
+        self.cmd_sub = self.create_subscription(FlowerInfo, 'flower_info', self.water_the_flower, 10)
+        self.growth_pub = self.create_publisher(FlowerInfo, 'flower_info', 10)
         self.img_node = ImgNode()
-        self.intrinsics = self._wait_for_valid_data(
-            self.img_node.get_camera_intrinsic, "camera intrinsics"
-        )
+        self.robot = robot.Robot()
 
-        if not os.path.exists(YOLO_MODEL_PATH):
-            print(f"File not found: {YOLO_MODEL_PATH}")
-            exit(1)
 
-        suffix = Path(YOLO_MODEL_PATH).suffix.lower()
-
-        if suffix == '.pt':
-            model = YOLO(YOLO_MODEL_PATH)
-        elif suffix in ['.onnx', '.engine']:
-            model = YOLO(YOLO_MODEL_PATH, task='detect')
-        else:
-            print(f"Unsupported model format: {suffix}")
-            exit(1)
-
-    def _load_model(self, name):
-        """모델 이름에 따라 인스턴스를 반환합니다."""
-        if name.lower() == 'yolo':
-            return YoloModel()
-        raise ValueError(f"Unsupported model: {name}")
-        
     def water_the_flower(self, msg):
         self.command = msg.command
         if self.command != CMD_START_WATERING:
             return
     
         self.id = msg.id
+        self.zone_number = msg.zone_number
         self.flower_name = msg.flower_name
         self.flower_meaning = msg.flower_meaning
         self.growth_duration_days = msg.growth_duration_days
@@ -113,47 +56,65 @@ class FlowerWatering(Node):
         self.growth_state = msg.growth_state
 
 
-        tts("물 주기를 시작합니다.")
-        self.get_logger().info("물 주기 시작")
+        tts("물 주기 노드를 시작합니다.")
+        self.get_logger().info("물 주기 노드 시작")
         
         self._get_flower()
+        self._water()
+        self._check_growth()
         
+
+        tts("물 주기 노드를 완료하였습니다.")
+        self.get_logger().info("물 주기 노드 완료")
         
     def _get_flower(self):
         self.get_logger().info("화분 가져오는 중...")
 
-        self._water()
+        self.robot.move_home()
+
+        self.robot.move(POS_PLANT[self.zone_number])
+        self.robot.open_grip()
+        self.robot.move_relative([0,0,-20,0,0,0])
+        self.robot.close_grip()
+        self.robot.move_relative([0,0, 20,0,0,0])
+
+        self.robot.move(POS_PLANT[0])
+        self.robot.move_relative([0,0,-20,0,0,0])
+        self.robot.force_on_z(-10)
+        self.robot.check_touch(max=10)
+        self.robot.force_off()
+
+        self.robot.open_grip()
+        self.robot.move_relative([0,0,20,0,0,0])
+        self.robot.close_grip()
+        self.robot.move_home()
+
+        self.get_logger().info("화분 픽업 완료")
+        
 
     def _water(self):
         self.get_logger().info("물 주기 실행")
-
-        self._check_growth()
-
-    def _check_growth(self):
-        msg = FlowerInfo()
-        msg.id = self.id
-        msg.command = CMD_CHECK_GROWTH_COMPLETE
-        msg.flower_name = self.flower_name
-        msg.flower_meaning = self.flower_meaning
-        msg.growth_duration_days = self.growth_duration_days
-        msg.watering_cycle = self.watering_cycle
-
-        rclpy.spin_once(self.img_node)
-
-        self.model.get_best_detection(self.img_node, )
+        self.robot.move_home()
+        self.robot.move(POS_WATER)
+        self.robot.open_grip()
+        self.robot.move_relative([0,0,-130,0,0,0])
+        self.robot.close_grip()
+        self.robot.move(POS_WATER)
 
         
-        grow_state = 1
-        self.growth_state=grow_state
-        msg.growth_state = self.growth_state
+        self.robot.move(POS_PLANT[0])
+        
+        self.get_logger().info("물 주기 완료")
 
-        self.growth_pub.publish(msg)
+
+    def _check_growth(self):
         self._take_pictures()
 
     def _take_pictures(self):
+        rclpy.spin_once(self.img_node)
         color_image = self.img_node.get_color_frame()
         if color_image is not None:
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            timestamp = datetime.today().strftime('%Y%m%d')
             filename = f"flower_{self.id}_{timestamp}.jpg"
             save_dir= os.path.join(package_path, "resource", "pictures", str(self.id))
             os.makedirs(save_dir, exist_ok=True)
@@ -168,13 +129,25 @@ class FlowerWatering(Node):
         self._return_flower()
 
     def _return_flower(self):
-        tts("물 주기를 완료하였습니다.")
-        self.get_logger().info("물 주기 완료")
-
+        msg = FlowerInfo()
+        msg.id = self.id
+        msg.command = CMD_END_WATERING
+        msg.flower_name = self.flower_name
+        msg.flower_meaning = self.flower_meaning
+        msg.growth_duration_days = self.growth_duration_days
+        msg.watering_cycle = self.watering_cycle
     
+        
+        grow_state = 1
+        self.growth_state=grow_state
+        
+        msg.growth_state = self.growth_state
+        self.growth_pub.publish(msg)
+
+
 
 def main(args=None):
-    rclpy.init(args=args)
+    # rclpy.init(args=args)
     node = FlowerWatering()
     try:
         rclpy.spin_once(node)
