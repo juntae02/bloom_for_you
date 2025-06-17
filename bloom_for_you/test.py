@@ -43,13 +43,14 @@ class Test(Node):
         keyword_extraction("test.txt")
 
     def callback(self,request,response):
+        self.get_logger().info("카드 출력 요청 수신됨")
         response.success = True
         return response
 
 def main():
     rclpy.init()
     node = Test()
-    rclpy.spin_once(node)
+    rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()
 
