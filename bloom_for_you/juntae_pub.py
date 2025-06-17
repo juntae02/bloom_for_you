@@ -9,7 +9,9 @@ class PublisherExample(Node):
 
     def publish_cmd_1(self):
         msg = FlowerInfo()
+        msg.id = 24
         msg.command = 1  # 만약 FlowerInfo 메시지에 command 라는 int 필드가 있다면
+        msg.zone_number = 2
         self.publisher_.publish(msg)
         self.get_logger().info('Published command = 1')
 
