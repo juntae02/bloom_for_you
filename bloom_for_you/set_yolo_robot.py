@@ -26,7 +26,9 @@ class SetYoloRobot(Node):
         super().__init__("use_yolo_set")
         self.grip_command = 0   # 타겟 명령이 왔는지
         self.grip_target = ""   # 타겟 이름
-        self.z_move = 0 # 타겟에서 높이 입력
+        self.x_move = 0 # 타겟에서 x 오프셋 입력
+        self.y_move = 0 # 타겟에서 y 오프셋 입력
+        self.z_move = 0 # 타겟에서 z 오프셋 입력
         
         # 1. 로봇 인스턴스
         self.robot_instance= robot.Robot()
@@ -49,12 +51,13 @@ class SetYoloRobot(Node):
         
     def grip_target_callback(self, msg:GripTarget):
         self.grip_target = msg.target
-        self.z_move = msg.height_z
+        self.x_move = msg.offset_x
+        self.y_move = msg.offset_y
+        self.z_move = msg.offset_z
         self.grip_command = 1
         
-    def robot_control(self, target, z_move):
-        # target, z_move = self.grip_target[0]
-        target_pos = self._get_target_pos(target, z_move)
+    def robot_control(self, target, x_move, y_move, z_move):
+        target_pos = self._get_target_pos(target, x_move, y_move, z_move)
         self.grip_command = 0
         if target_pos is None:
             self.get_logger().warn("No target position")
@@ -86,15 +89,13 @@ class SetYoloRobot(Node):
 
         return td_coord[:3]
 
-    def _get_target_pos(self, target, z_move = 0):
+    def _get_target_pos(self, target, x_move = 0, y_move = 0, z_move = 0):
         self.get_position_request.target = target
         self.get_logger().info("call depth position service with object_detection node")
         get_position_future = self.get_position_client.call_async(
             self.get_position_request
         )
-        self.get_logger().info("aaaa")
         rclpy.spin_until_future_complete(self, get_position_future)
-        self.get_logger().info("bbbb")
 
         if get_position_future.result():
             result = get_position_future.result().depth_position.tolist()
@@ -110,7 +111,10 @@ class SetYoloRobot(Node):
             td_coord = self._transform_to_base(result, gripper2cam_path, robot_posx)
 
             if td_coord[2] and sum(td_coord) != 0:
+                td_coord[0] = td_coord[0] + x_move
+                td_coord[1] = td_coord[1] + y_move
                 td_coord[2] = td_coord[2] + z_move
+                
                 td_coord[2] = max(td_coord[2], MIN_DEPTH)  # MIN_DEPTH: float = 3.0
             target_pos = list(td_coord[:3]) + robot_posx[3:]
 
@@ -130,7 +134,10 @@ def main(args=None):
         rclpy.spin_once(yolo_robot_node, timeout_sec=0.1)
 
         if(yolo_robot_node.grip_command ==1):
-            yolo_robot_node.robot_control(yolo_robot_node.grip_target,yolo_robot_node.z_move)
+            x = yolo_robot_node.x_move
+            y = yolo_robot_node.y_move
+            z = yolo_robot_node.z_move
+            yolo_robot_node.robot_control(yolo_robot_node.grip_target, x, y, z)
     rclpy.shutdown()
     yolo_robot_node.destroy_node()
 
