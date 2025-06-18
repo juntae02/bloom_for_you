@@ -246,8 +246,9 @@ def run_flower_logic(node):
     except Exception as e:
         node.get_logger().error(f"Error in main flow: {e}")
     finally:
-        node.destroy_node()
-        rclpy.shutdown()
+        # node.destroy_node()
+        # rclpy.shutdown()
+        pass
 
 def main():
     rclpy.init()

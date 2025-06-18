@@ -5,6 +5,7 @@ from bloom_for_you.function_modules import robot
 from bloom_for_you.function_modules import yolo
 from bloom_for_you.function_modules.tts import tts, make_txt
 import DR_init
+import time
 
 CMD_SEED = 2    # 씨앗 심기 노드 실행
 FINISH_SEED = 3 # 씨앗 심기 완료
@@ -25,6 +26,7 @@ class SeedPlanting(Node):
         self.cmd_sub = self.create_subscription(FlowerInfo, 'flower_info', self.cmd_callback, 10)
         self.cmd_pub = self.create_publisher(FlowerInfo, 'flower_info', 10)
         self.robot_instance = robot.Robot()
+        self.yolo_instance = yolo.Yolo()
 
     def cmd_callback(self, msg):
         self.command = msg.command
@@ -44,10 +46,10 @@ class SeedPlanting(Node):
         self.get_logger().info("씨앗 심기를 시작합니다.")
 
         self.move_seed()    # 씨앗 위치로 이동
-        # self.pickup_seed()  # 씨앗 집기
-        # self.plant_seed()   # 씨앗 심기
-        # self.move_zone()    # 화분 이동
-        # self.end_planting()   # 종료 알림
+        self.pickup_seed()  # 씨앗 집기
+        self.plant_seed()   # 씨앗 심기
+        self.move_zone()    # 화분 이동
+        self.end_planting()   # 종료 알림
 
 
     def move_seed(self):
@@ -63,29 +65,50 @@ class SeedPlanting(Node):
     def pickup_seed(self):
         self.get_logger().info('씨앗 가져오는 중...')
         self.robot_instance.open_grip()
+        time.sleep(1.0)
+
         # yolo 이동
+        target = "씨앗"
+        x = 0
+        y = 10
+        z = -8
+        self.yolo_instance.grip_target(target,x, y, z)
+        time.sleep(7.0)
+
         self.robot_instance.close_grip()
-        self.robot_instance.move_relative([0.0, 0.0, 50.0, 0.0, 0.0, 0.0])  # 위로 50 이동
+        time.sleep(1.0)
+        self.robot_instance.move_relative([0.0, 0.0, 100.0, 0.0, 0.0, 0.0])  # 위로 10cm 이동
+        time.sleep(1.0)
         
     def plant_seed(self):
         self.get_logger().info('씨앗 운반 중...')
-        self.robot_instance.move(POS_PLANT[0])
+        self.robot_instance.move_home()
+        time.sleep(1.0)
+
         # yolo 이동
         self.get_logger().info('씨앗 심는 중...')
-        # self.robot_instance.move_relative([0.0, 0.0, 20.0, 0.0, 0.0, 0.0])  # 그립 open 각 안 나올 때
-        self.robot_instance.open_grip()
+        target = "화분"
+        x = -10
+        y = 10
+        z = 110
+        self.yolo_instance.grip_target(target,x, y,z)
+        time.sleep(5.0)
+        self.robot_instance.open_grip() # 씨앗 심기
 
     def move_zone(self):
         self.get_logger().info('화분 운반 중...')
-        # self.robot_instance.move_relative([20.0, 20.0, 0.0, 0.0, 0.0, 0.0])  # 집기 위한 위치 맞추기
-        # self.robot_instance.move_relative([0.0, 0.0, -10.0, 0.0, 0.0, 0.0])  # 집기 위해 살짝 내려가기
+        self.robot_instance.move_relative([-60.0, 0.0, 0.0, 0.0, 0.0, 0.0])  # 집기 위한 위치 맞추기
+        self.robot_instance.move_relative([0.0, 0.0, -20.0, 0.0, 0.0, 0.0])  # 집기 위해 살짝 내려가기
         self.robot_instance.close_grip()
-        # self.robot_instance.move_relative([0.0, 0.0, 20.0, 0.0, 0.0, 0.0])  # 살짝 위로 올라가기
+        self.robot_instance.move_relative([0.0, 0.0, 100.0, 0.0, 0.0, 0.0])  # 살짝 위로 올라가기
 
         self.robot_instance.move(POS_PLANT[self.zone_number])
-        # self.robot_instance.move_relative([0.0, 0.0, -30.0, 0.0, 0.0, 0.0])  # 살짝 밑으로 내려가기
+        self.robot_instance.move_relative([0.0, 0.0, -250.0, 0.0, 0.0, 0.0])  # 살짝 밑으로 내려가기
+        time.sleep(1.0)
         self.robot_instance.force_on_z(-10) # z축 방향 힘
-        self.robot_instance.check_touch()   # 힘 감지시 정지
+        time.sleep(1.0)
+        self.robot_instance.check_touch(max=14)   # 힘 감지시 정지
+        time.sleep(1.0)
         self.robot_instance.open_grip()
 
         # 복귀
@@ -103,7 +126,7 @@ class SeedPlanting(Node):
         msg.flower_meaning = self.flower_meaning
         msg.growth_duration_days = self.growth_duration_days
         msg.watering_cycle = self.watering_cycle
-        msg.growth_state = 0  # 꽃 성장 상태 0
+        msg.growth_state = 0  # 꽃 성장 상태 
 
         self.cmd_pub.publish(msg)
         self.get_logger().info('전송 완료')
@@ -115,6 +138,8 @@ def main(args=None):
         rclpy.spin(node)
     finally:
         node.destroy_node()
+        # if rclpy.ok():  # shutdown이 이미 되지 않았을 때만 호출
+        #     rclpy.shutdown()
         rclpy.shutdown()
 
 if __name__ == '__main__':
