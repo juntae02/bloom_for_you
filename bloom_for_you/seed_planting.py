@@ -3,7 +3,7 @@ from rclpy.node import Node
 from bloom_for_you_interfaces.msg import FlowerInfo
 from bloom_for_you.function_modules import robot
 from bloom_for_you.function_modules import yolo
-from bloom_for_you.function_modules.tts import tts, make_txt
+from bloom_for_you.function_modules.tts import tts
 import DR_init
 import time
 
@@ -42,7 +42,7 @@ class SeedPlanting(Node):
         
         self.robot_instance.move_home()
         self.robot_instance.close_grip()
-        # tts("씨앗 심기를 시작합니다.")
+        tts("씨앗 심기를 시작합니다")
         self.get_logger().info("씨앗 심기를 시작합니다.")
 
         self.move_seed()    # 씨앗 위치로 이동
@@ -55,15 +55,19 @@ class SeedPlanting(Node):
     def move_seed(self):
         if self.flower_name == "해바라기":
             self.get_logger().info('해바라기 씨앗 바구니로 이동 중...')
+            tts("해바라기 씨앗 바구니로 이동합니다")
             self.robot_instance.move(POS_PLANT[5])
         elif self.flower_name == "튤립":
             self.get_logger().info('튤립 씨앗 바구니로 이동 중...')
+            tts("튤립 씨앗 바구니로 이동합니다")
             self.robot_instance.move(POS_PLANT[4])
         else:
             self.get_logger().info('원하시는 씨앗이 없습니다.')
+            tts("원하시는 씨앗이 없습니다")
 
     def pickup_seed(self):
         self.get_logger().info('씨앗 가져오는 중...')
+        tts("씨앗을 가져옵니다")
         self.robot_instance.open_grip()
         time.sleep(1.0)
 
@@ -82,11 +86,13 @@ class SeedPlanting(Node):
         
     def plant_seed(self):
         self.get_logger().info('씨앗 운반 중...')
+        tts("씨앗을 운반합니다")
         self.robot_instance.move_home()
         time.sleep(1.0)
 
         # yolo 이동
         self.get_logger().info('씨앗 심는 중...')
+        tts("씨앗을 심습니다")
         target = "화분"
         x = -10
         y = 10
@@ -97,6 +103,7 @@ class SeedPlanting(Node):
 
     def move_zone(self):
         self.get_logger().info('화분 운반 중...')
+        tts("화분을 운반합니다")
         self.robot_instance.move_relative([-60.0, 0.0, 0.0, 0.0, 0.0, 0.0])  # 집기 위한 위치 맞추기
         self.robot_instance.move_relative([0.0, 0.0, -20.0, 0.0, 0.0, 0.0])  # 집기 위해 살짝 내려가기
         self.robot_instance.close_grip()

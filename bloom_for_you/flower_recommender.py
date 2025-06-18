@@ -12,7 +12,7 @@ import threading
 from langchain.prompts import PromptTemplate
 from std_msgs.msg import Int32
 from bloom_for_you.function_modules.keyword_extraction import keyword_extraction
-from bloom_for_you.function_modules.tts import tts, make_txt
+from bloom_for_you.function_modules.tts import tts
 from bloom_for_you_interfaces.msg import FlowerInfo
 
 
@@ -105,6 +105,7 @@ class FlowerApp(App):
 
     def build(self):
         """GUI Layout 생성""" 
+        # tts("꽃이 마음에 드시나요?")
         self.title = "bloom_for_you"
 
         layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
@@ -175,6 +176,7 @@ class FlowerApp(App):
 # but 시나리오 상에 다운로드 받을 이미지가 많아짐
     def on_select(self, instance):
         print("선택되었습니다.")
+        tts("선택되었습니다")
 
         msg = FlowerInfo()
         msg.id = self.flower['id']  
@@ -195,6 +197,7 @@ class FlowerApp(App):
 
     def on_reselect(self, instance):
         print("재선택되었습니다.")
+        tts("재선택되었습니다")
         self.redo = True
         App.get_running_app().stop()
 
@@ -207,23 +210,27 @@ def run_flower_logic(node):
             keyword = None
             while keyword is None:
 ## 여기에 로봇이 선물 목적과 남은 기간을 묻는 부분 추가 
-                #tts("ㅍㅊㅇㄻㄴㅇ")
+                tts("선물의 목적과 남은 기간을 말씀해주세요")
                 keyword = node.extract_keyword()  
-                node.get_logger().info(f"\n목적-{keyword[0][0]}, 기간-{keyword[1][0]}")   
-                # 해바라기: 졸업 1개월이내
-                # 튤립 : 축하 4-6개월
                 if keyword is None:
-                    node.get_logger().info("목적이나 기간 정보가 빠진 듯합니다.")
+                    node.get_logger().info("\n목적이나 기간 정보가 빠진 듯합니다.\n")
+                    tts("목적이나 기간 정보가 빠진 거 같습니다")
+                    tts("다시 한 번 말씀해주세요")
                     time.sleep(3.0)
+                else:
+                    node.get_logger().info(f"\n목적-{keyword[0][0]}, 기간-{keyword[1][0]}\n") 
+
 
             object = keyword[0][0]         # 축하
             destination = keyword[1][0]    # 1개월이내
+            # 해바라기: 졸업 1개월이내
+            # 튤립 : 축하 4-6개월
 
             # template:str, input_list:list
-            #template = "add {} ddfad {}"
-            #input_list = [object, destination]
-            #text = make_txt(template, input_list)
-            #tts(text)
+            # template = "{}, {} 2개의 키워드를 추출하였습니다"
+            # input_list = [object, destination]
+            # text = make_txt(template, input_list)
+            # tts(text)
 
         # json 파일과 꽃 키워드 매칭
             with open(json_path, 'r') as f:
