@@ -208,7 +208,8 @@ def run_flower_logic(node):
             while keyword is None:
 ## 여기에 로봇이 선물 목적과 남은 기간을 묻는 부분 추가 
                 #tts("ㅍㅊㅇㄻㄴㅇ")
-                keyword = node.extract_keyword()     
+                keyword = node.extract_keyword()  
+                node.get_logger().info(f"\n목적-{keyword[0][0]}, 기간-{keyword[1][0]}")   
                 # 해바라기: 졸업 1개월이내
                 # 튤립 : 축하 4-6개월
                 if keyword is None:
@@ -217,10 +218,6 @@ def run_flower_logic(node):
 
             object = keyword[0][0]         # 축하
             destination = keyword[1][0]    # 1개월이내
-            # object = "졸업"
-            # destination = "1개월이내"
-            # object = "축하"
-            # destination = "4-6개월"
 
             # template:str, input_list:list
             #template = "add {} ddfad {}"

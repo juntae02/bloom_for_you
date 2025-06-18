@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from bloom_for_you_interfaces.msg import FlowerInfo
 from bloom_for_you.function_modules import robot
+from bloom_for_you.function_modules import yolo
 from bloom_for_you.function_modules.tts import tts, make_txt
 import DR_init
 
