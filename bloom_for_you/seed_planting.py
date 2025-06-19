@@ -181,9 +181,9 @@ def main(args=None):
         rclpy.spin(node)
     finally:
         node.destroy_node()
-        # if rclpy.ok():  # shutdown이 이미 되지 않았을 때만 호출
-        #     rclpy.shutdown()
-        rclpy.shutdown()
+        if rclpy.ok():  # shutdown이 이미 되지 않았을 때만 호출
+            rclpy.shutdown()
+        # rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
