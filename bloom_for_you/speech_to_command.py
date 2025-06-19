@@ -82,12 +82,13 @@ class SpeechToCommand(Node):
         if self.WAKE_UP_STATE == 1:
             self.response = keyword_extraction.keyword_extraction("/home/we/rokey_ws/build/bloom_for_you/resource/get_command_prompt.txt")
             # 음성 -> 커맨드 추출 실행
-            return_val = tts.make_txt("예약번호는 {}입니다. {}을 고르셨습니다 이대로 진행할까요?", [1234, "씨앗선택"])
+            # return_val = tts.make_txt("예약번호는 {}입니다. {}을 고르셨습니다 이대로 진행할까요?", [1234, "씨앗선택"])
+            # tts.tts(return_val)
             
             print(self.response)
-            input("enter to end")
+            # input("enter to end")
+
             
-            tts.tts(return_val)
             self.WAKE_UP_STATE = 2
         else:
             pass        
