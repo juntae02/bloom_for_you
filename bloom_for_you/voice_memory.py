@@ -178,8 +178,8 @@ def main():
         finally:
             node.destroy_node()
             rclpy.shutdown()
-    else:
-        voice_memory_with_robot()
+    # else:
+    #     voice_memory_with_robot()
 
 if __name__ == "__main__":
     main()
