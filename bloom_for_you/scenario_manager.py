@@ -39,8 +39,8 @@ class ScenarioManager(Node):
         self.LISTEN_COMMAND_STATE = 0
         
         self.flower_info_list = []
-        flower_temp = Flower(id = 1234, zone_number=1)
-        self.flower_info_list.append(flower_temp)
+        # flower_temp = Flower(id = 1234, zone_number=1)
+        # self.flower_info_list.append(flower_temp)
 
         self.scenario_zone_number = [0]
 
@@ -69,6 +69,8 @@ class ScenarioManager(Node):
                 temp_txt = "음성 녹음"
             elif self.command_queue[0][1] == 20:
                 temp_txt = "포장"
+            else:
+                temp_txt = str(self.command_queue[0][1])
                 
             
             self.get_logger().info(f"@@@@@@@@@@@@ run command!! 예약번호 = {self.command_queue[0][0]} 실행 명령 = {temp_txt} @@@@@@@@@@@@")
@@ -173,13 +175,16 @@ class ScenarioManager(Node):
                 
 
                 # 씨앗 심기 완료면 주기 10으로 줄이기
-                if flower_.command == 3 and flower_.zone_number == 1:
-                    self.timestamp = 0
-                    flower_.watering_cycle = 10
+                if flower_.command == 3:
+                    if flower_.zone_number == 1:
+                        self.timestamp = 0
+                        flower_.watering_cycle = 10
+                    else:
+                        flower_.watering_cycle = 10000
                 
                 # 물주기 완료면 주기 1000으로 늘리기
                 if flower_.command == 31:
-                    flower_.watering_cycle = 1000
+                    flower_.watering_cycle = 10000
                     
 
                 # 포장 완료면 플라워 리스트에서 삭제 해야됨
