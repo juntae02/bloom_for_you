@@ -98,6 +98,13 @@ class ScenarioManager(Node):
             for flower_ in self.flower_info_list:
                 if(flower_.id == res_num):
                     self.command_queue.append((res_num, cmd_num))
+        
+        ############# 포장 #############
+        if(cmd_num == 20):
+            # 이미 있는 예약번호인지 확인
+            for flower_ in self.flower_info_list:
+                if(flower_.id == res_num):
+                    self.command_queue.append((res_num, cmd_num))
 
     # 커맨드 큐 저장 2 - 물 스케줄에 맞춰서 커맨드 큐에 저장
     def watering_scheduler(self):
@@ -122,7 +129,7 @@ class ScenarioManager(Node):
         for flower_ in self.flower_info_list:
             if msg.id == flower_.id:
                 self.get_logger().info(f"꽃 업데이트: {flower_.id}")
-                self.update_flower_from_msg_(flower_,msg)            
+                self.update_flower_from_msg_(flower_,msg)
 
     def convert_flower_to_msg_(self, flower_) -> FlowerInfo:
         msg = FlowerInfo()
