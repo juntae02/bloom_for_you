@@ -60,7 +60,7 @@ def move_flower(robot_instance, zone_number):
     time.sleep(1.0)
     robot_instance.move(POS_PLANT[zone_number])     # 원위치 복귀(혹은 들기)
     
-    # ↓ 테이블2로 이동해서, 16cm 내리기 & 그리퍼 열기
+    # ↓ 테이블2로 이동해서, 18cm 내리기 & 그리퍼 열기
     descend_and_release(robot_instance, POS_TABLE2)
 
     robot_instance.move(POS_TABLE2)                 # 혹시 필요하다면 위치 고정
@@ -71,11 +71,28 @@ def move_flower(robot_instance, zone_number):
 
 def descend_and_release(robot_instance, start_pos):
     robot_instance.move(start_pos)                  # 테이블 위치로 이동
-    robot_instance.move_relative([0, 0, -180, 0, 0, 0])  # 16cm 하강
+    robot_instance.move_relative([0, 0, -180, 0, 0, 0])  # 18cm 하강
     time.sleep(0.3)
     robot_instance.open_grip()                      # 그리퍼 열기(내려놓기)
     robot_instance.force_off()                      # force control 해제
 
+def reverse_move_flower(robot_instance, zone_number):
+    log_voice_msg("화분을 원위치로 옮기는 중...")
+
+    robot_instance.move(POS_TABLE2)                 # 테이블 위치로 이동
+    robot_instance.open_grip()                      # 혹시 열려있지 않으면 확실히 열기
+    time.sleep(1.0)
+    robot_instance.move_relative([0, 0, -180, 0, 0, 0])   # 18cm 아래로 내리기
+    time.sleep(0.5)
+    robot_instance.close_grip()                     # 집기
+    time.sleep(1.0)
+    robot_instance.move(POS_TABLE2)                 # 테이블로 복귀(확실히)
+    robot_instance.move(POS_PLANT[zone_number])     # 원래 zone으로 이동
+    robot_instance.move_relative([0, 0, -300, 0, 0, 0])   # 30cm 내려놓기
+    time.sleep(0.5)
+    robot_instance.open_grip()                      # 그리퍼 열기(놓기)
+    robot_instance.force_off()
+    log_voice_msg("화분 원위치 완료")
 
 # ───────── 핵심 로직 (음성 메시지 받고 서버에 전송 + 화분 제어 통합) ─────────
 def voice_memory_with_robot(res_num, zone_number=1):  # zone_number도 받게 변경!
@@ -106,6 +123,9 @@ def voice_memory_with_robot(res_num, zone_number=1):  # zone_number도 받게 �
     tts("메시지가 저장되었습니다. 화분을 다시 제자리에 놓겠습니다.")
     log_voice_msg("화분 이동중..")
     tts("모든 작업이 끝났습니다.")
+    time.sleep(3)   # 3초 대기
+
+    reverse_move_flower(robot_instance, zone_number)  # 역동작 수행
     log_voice_msg("화분 원위치 완료")
     return True
 
