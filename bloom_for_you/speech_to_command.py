@@ -12,6 +12,9 @@ import threading
 from bloom_for_you.function_modules import keyword_extraction
 from std_msgs.msg import String
 
+from ament_index_python.packages import get_package_share_directory
+import os
+
 """
 진행 상황
 - 메시지 입력 받음
@@ -91,8 +94,12 @@ class SpeechToCommand(Node):
             pass
 
     def listen_command(self):
+        package_share_dir = get_package_share_directory('bloom_for_you')
+        # 리소스 파일 경로 설정
+        prompt_path = os.path.join(package_share_dir, 'resource', 'get_command_prompt.txt')
+
         if self.WAKE_UP_STATE == 1:
-            self.response = keyword_extraction.keyword_extraction("/home/we/rokey_ws/build/bloom_for_you/resource/get_command_prompt.txt")
+            self.response = keyword_extraction.keyword_extraction(prompt_path)
             
             res_num, cmd_num = self.response.split('/')
             res_num = int(res_num)
