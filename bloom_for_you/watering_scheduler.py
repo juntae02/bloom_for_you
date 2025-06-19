@@ -19,7 +19,7 @@ from bloom_for_you_interfaces.msg import FlowerInfo
 ########### FlowerWatering ############
 
 # current_dir = os.path.dirname(os.path.abspath(__file__))
-package_path = "/home/rokey/r2_ws/src/bloom_for_you"
+package_path = "/home/rokey/ros2_ws/src/bloom_for_you"
 # package_path = os.path.abspath(os.path.join(current_dir, ".."))
 
 CMD_START_WATERING = 30
