@@ -60,11 +60,11 @@ class FlowerWrapping(Node):
         tts("포장을 시작합니다.")
         self.get_logger().info("포장을 시작합니다.")
 
-        # self._get_bag()
-        # self._get_flower()
+        self._get_bag()
+        self._get_flower()
         # self._insert_card()
         self._get_card()
-        # self._offer_bag()
+        self._offer_bag()
 
         tts('포장이 완료되었습니다.')
         self.get_logger().info("포장이 완료되었습니다.")
