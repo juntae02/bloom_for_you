@@ -38,7 +38,9 @@ class SeedPlanting(Node):
     def cmd_callback(self, msg):     
         self.command = msg.command
         if self.command != CMD_SEED:
+            self.get_logger().info("다른 커맨드 수신")
             return
+        self.get_logger().info("2번 커맨드 수신")
         self.id = msg.id
         self.zone_number = msg.zone_number
         self.flower_name = msg.flower_name
@@ -90,7 +92,7 @@ class SeedPlanting(Node):
             target = "씨앗"
             x = 0
             y = 10
-            z = -8
+            z = -9  # 값 변경
             self.yolo_instance.grip_target(target, x, y, z)
             time.sleep(7.0)
 
