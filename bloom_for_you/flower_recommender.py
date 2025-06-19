@@ -205,6 +205,9 @@ class FlowerApp(App):
 def run_flower_logic(node):
     
     try:
+        # json 파일과 꽃 키워드 매칭
+        with open(json_path, 'r') as f:
+            flower_data = json.load(f)
         while True:
         # 꽃 키워드 추출
             keyword = None
@@ -214,8 +217,7 @@ def run_flower_logic(node):
                 keyword = node.extract_keyword()  
                 if keyword is None:
                     node.get_logger().info("\n목적이나 기간 정보가 빠진 듯합니다.\n")
-                    tts("목적이나 기간 정보가 빠진 거 같습니다")
-                    tts("다시 한 번 말씀해주세요")
+                    tts("목적이나 기간 정보가 빠진 거 같습니다. 다시 한 번 말씀해주세요")
                     time.sleep(3.0)
                 else:
                     node.get_logger().info(f"\n목적-{keyword[0][0]}, 기간-{keyword[1][0]}\n") 
@@ -232,9 +234,7 @@ def run_flower_logic(node):
             # text = make_txt(template, input_list)
             # tts(text)
 
-        # json 파일과 꽃 키워드 매칭
-            with open(json_path, 'r') as f:
-                flower_data = json.load(f)
+        
 
             flower = node.find_flower(flower_data, object, destination)
 
@@ -264,13 +264,19 @@ def main():
     thread = threading.Thread(target=rclpy.spin, args=(node,), daemon=True)
     thread.start()
 
-    node.get_logger().info('Waiting for CMD 1...')
-    node.cmd_received.wait()
-    node.get_logger().info('Command 1 received, now starting main flow')
+    try:
+        while rclpy.ok():
+            node.get_logger().info('Waiting for CMD 1...')
+            node.cmd_received.clear() 
+            node.cmd_received.wait()
+            node.get_logger().info('Command 1 received, now starting main flow')
 
-    # cmd_received 발생 후 run_flower_logic 수행
-    run_flower_logic(node)
-
-    node.destroy_node()
-    rclpy.shutdown()
-    thread.join()
+            # cmd_received 발생 후 run_flower_logic 수행
+            run_flower_logic(node)
+    except KeyboardInterrupt:
+        print("사용자에 의해 종료되었습니다.")
+    finally:
+        node.destroy_node()
+        if rclpy.ok():
+            rclpy.shutdown()
+        thread.join()
