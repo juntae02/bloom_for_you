@@ -30,9 +30,6 @@ POS_CARD3 = [308.48, -8.55, 348.27, 12.91, -180.00, 14.34] #3 100 다운
 POS_CARD = [POS_CARD1,POS_CARD2,POS_CARD3]
 POS_PICKUP = []
 
-POT = "화분"
-# BABY = ["해바라기새싹", "튤립새싹"]
-FLOWER = ["해바라기", "튤립"]
 
 
 class FlowerWrapping(Node):
