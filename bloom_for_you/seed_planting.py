@@ -6,6 +6,7 @@ from bloom_for_you.function_modules import yolo
 from bloom_for_you.function_modules.tts import tts
 import DR_init
 import time
+from bloom_for_you.function_modules.onrobot_ import RG
 
 CMD_SEED = 2    # 씨앗 심기 노드 실행
 FINISH_SEED = 3 # 씨앗 심기 완료
@@ -20,6 +21,11 @@ POS_ZONE2 = [-114.80, -460.45, 197.16, 69.36, 180.00, 163.36]   # 플랜트 존 
 
 POS_PLANT = [POS_TABLE, POS_ZONE1, POS_ZONE2, POS_SEED1, POS_SEED2, POS_SEED3]
 
+GRIPPER_NAME = "rg2"
+TOOLCHARGER_IP = "192.168.1.1"
+TOOLCHARGER_PORT = "502"
+MAX_ATTEMPTS = 3 # 최대 재시도 횟수
+
 class SeedPlanting(Node):
     def __init__(self):
         super().__init__('seed_planting')
@@ -27,6 +33,7 @@ class SeedPlanting(Node):
         self.cmd_pub = self.create_publisher(FlowerInfo, 'flower_info', 10)
         self.robot_instance = robot.Robot()
         self.yolo_instance = yolo.Yolo()
+        self.gripper_instance = RG(GRIPPER_NAME, TOOLCHARGER_IP, TOOLCHARGER_PORT)
 
     def cmd_callback(self, msg):
         self.command = msg.command
@@ -48,8 +55,8 @@ class SeedPlanting(Node):
         self.move_seed()    # 씨앗 위치로 이동
         self.pickup_seed()  # 씨앗 집기
         self.plant_seed()   # 씨앗 심기
-        self.move_zone()    # 화분 이동
-        self.end_planting()   # 종료 알림
+        # self.move_zone()    # 화분 이동
+        # self.end_planting()   # 종료 알림
 
 
     def move_seed(self):
@@ -68,21 +75,50 @@ class SeedPlanting(Node):
     def pickup_seed(self):
         self.get_logger().info('씨앗 가져오는 중...')
         tts("씨앗을 가져옵니다")
-        self.robot_instance.open_grip()
-        time.sleep(1.0)
+        
 
-        # yolo 이동
-        target = "씨앗"
-        x = 0
-        y = 10
-        z = -8
-        self.yolo_instance.grip_target(target,x, y, z)
-        time.sleep(7.0)
+        attempt = 0
+        success = False
+        # 예외사항
+        while attempt < MAX_ATTEMPTS and not success:
+            print(f"[시도 {attempt+1}] YOLO로 감지 중...")
 
-        self.robot_instance.close_grip()
-        time.sleep(1.0)
-        self.robot_instance.move_relative([0.0, 0.0, 100.0, 0.0, 0.0, 0.0])  # 위로 10cm 이동
-        time.sleep(1.0)
+            self.robot_instance.open_grip()
+            time.sleep(1.0)
+            
+            # YOLO로 객체 위치 감지 및 이동
+            target = "씨앗"
+            x = 0
+            y = 10
+            z = -8
+            self.yolo_instance.grip_target(target, x, y, z)
+            time.sleep(7.0)
+
+            # 그리퍼 닫기
+            self.robot_instance.close_grip()
+            time.sleep(1.0)
+
+            # 그리퍼 상태 확인
+            grip_status = self.gripper_instance.get_status()[1]
+            if grip_status == 1:
+                print("물체를 성공적으로 집었습니다.")
+                success = True
+                # 위로 이동
+                self.robot_instance.move_relative([0.0, 0.0, 100.0, 0.0, 0.0, 0.0])
+                time.sleep(1.0)
+                    
+            else:
+                print("물체를 집지 못했습니다. 다시 감지 시도합니다.")
+                attempt += 1
+                self.robot_instance.move_relative([0.0, 0.0, 50.0, 0.0, 0.0, 0.0])
+                if self.flower_name == "해바라기":
+                    self.robot_instance.move(POS_PLANT[5])
+                elif self.flower_name == "튤립":
+                    self.robot_instance.move(POS_PLANT[4])
+                time.sleep(1.0)  # 재시도 전 잠시 대기
+
+        if attempt == 3:
+            tts("관리자 호출 합니다")
         
     def plant_seed(self):
         self.get_logger().info('씨앗 운반 중...')
