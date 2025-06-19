@@ -35,7 +35,7 @@ class SeedPlanting(Node):
         self.yolo_instance = yolo.Yolo()
         self.gripper_instance = RG(GRIPPER_NAME, TOOLCHARGER_IP, TOOLCHARGER_PORT)
 
-    def cmd_callback(self, msg):
+    def cmd_callback(self, msg):     
         self.command = msg.command
         if self.command != CMD_SEED:
             return
@@ -55,8 +55,8 @@ class SeedPlanting(Node):
         self.move_seed()    # 씨앗 위치로 이동
         self.pickup_seed()  # 씨앗 집기
         self.plant_seed()   # 씨앗 심기
-        # self.move_zone()    # 화분 이동
-        # self.end_planting()   # 종료 알림
+        self.move_zone()    # 화분 이동
+        self.end_planting()   # 종료 알림
 
 
     def move_seed(self):
