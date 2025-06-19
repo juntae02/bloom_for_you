@@ -39,7 +39,9 @@ class ScenarioManager(Node):
         self.LISTEN_COMMAND_STATE = 0
         
         self.flower_info_list = []
-        
+        flower_temp = Flower(id = 1234, zone_number=1)
+        self.flower_info_list.append(flower_temp)
+
         self.scenario_zone_number = [0]
 
         # ROS 퍼블리셔 및 서브스크라이버
@@ -168,6 +170,17 @@ class ScenarioManager(Node):
                 # 로봇 STATE 0로 변경
                 if flower_.command == 3 or flower_.command == 11 or flower_.command == 22 or flower_.command == 31:
                     self.ROBOT_STATE = 0
+                
+
+                # 씨앗 심기 완료면 주기 10으로 줄이기
+                if flower_.command == 3:
+                    self.timestamp = 0
+                    flower_.watering_cycle = 10
+                
+                # 물주기 완료면 주기 10으로 줄이기
+                if flower_.command == 31:
+                    flower_.watering_cycle = 1000
+                    
 
                 # 포장 완료면 플라워 리스트에서 삭제 해야됨
                 if flower_.command == 22:
