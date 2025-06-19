@@ -173,11 +173,11 @@ class ScenarioManager(Node):
                 
 
                 # 씨앗 심기 완료면 주기 10으로 줄이기
-                if flower_.command == 3:
+                if flower_.command == 3 and flower_.zone_number == 1:
                     self.timestamp = 0
                     flower_.watering_cycle = 10
                 
-                # 물주기 완료면 주기 10으로 줄이기
+                # 물주기 완료면 주기 1000으로 늘리기
                 if flower_.command == 31:
                     flower_.watering_cycle = 1000
                     
