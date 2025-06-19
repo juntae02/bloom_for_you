@@ -46,79 +46,57 @@ def authenticate() -> str | None:
 
 # ───────── 천천히 하강하며 힘 감지 후 그리퍼 여는 함수 (check_force_condition 방식) ─────────
 import time
-def descend_and_release(robot_instance, start_pos, min_threshold=5, max_threshold=15, step=-3, max_descend=80):
-    """
-    table2 위치에서 천천히 아래로 내리면서 check_force_condition으로 힘 감지, 임계치 도달시 그리퍼 open
-    - step: 한번에 내려갈 거리(mm, 음수)
-    - max_descend: 최대 몇 mm까지 내릴지(절대값)
-    """
-    robot_instance.move(start_pos)
-    moved = 0
-    while abs(moved) < abs(max_descend):
-        # 힘이 임계치를 벗어나면 break (힘이 min~max 범위를 벗어나면 터치된 것으로 간주)
-        if not robot_instance.check_force_condition(robot_instance.DR_AXIS_Z, min_threshold, max_threshold):
-            break
-        robot_instance.move_relative([0, 0, step, 0, 0, 0])
-        moved += abs(step)
-        time.sleep(0.15)  # 센서 안정화
-
-    robot_instance.open_grip()
-    robot_instance.force_off()  # force/컴플라이언스 해제
-
-# ───────── 화분 이동 함수 ─────────
 def move_flower(robot_instance, zone_number):
     log_voice_msg("화분 가져오는 중...")
 
-    robot_instance.move(POS_PLANT[0])
-    robot_instance.move(POS_PLANT[zone_number])
+    robot_instance.move(POS_PLANT[0])               # 출발점으로 이동
+    robot_instance.move(POS_PLANT[zone_number])     # zone으로 이동
     time.sleep(1.0)
-    robot_instance.open_grip()
+    robot_instance.open_grip()                      # 그리퍼 열기
     time.sleep(1.0)
-    robot_instance.move_relative([0,0,-300,0,0,0])
+    robot_instance.move_relative([0,0,-300,0,0,0])  # 아래로 30cm 내리기 (화분 잡기용)
     time.sleep(1.0)
-    robot_instance.close_grip()
+    robot_instance.close_grip()                     # 그리퍼 닫기(집기)
     time.sleep(1.0)
-    robot_instance.move(POS_PLANT[zone_number])
+    robot_instance.move(POS_PLANT[zone_number])     # 원위치 복귀(혹은 들기)
+    
+    # ↓ 테이블2로 이동해서, 16cm 내리기 & 그리퍼 열기
+    descend_and_release(robot_instance, POS_TABLE2)
 
-    # ⭐️ 천천히 테이블에 내리면서 힘 감지 → 그리퍼 open
-    descend_and_release(robot_instance, POS_TABLE2, min_threshold=5, max_threshold=15)
-
-    robot_instance.move(POS_TABLE2)
-    robot_instance.close_grip()
+    robot_instance.move(POS_TABLE2)                 # 혹시 필요하다면 위치 고정
+    robot_instance.close_grip()                     # (이 부분은 필요에 따라!)
 
     log_voice_msg("화분 픽업 완료")
 
-# ───────── 핵심 로직 (음성 메시지 받고 서버에 전송 + 화분 제어 통합) ─────────
-def voice_memory_with_robot():
-    # 1) 인증 단계
-    res_num = authenticate()
-    if not res_num:
-        tts("서비스를 종료합니다")
-        return False
 
-    # zone_number는 예시로 1 (원하는 zone_number로 바꿔줘!)
-    zone_number = 1
+def descend_and_release(robot_instance, start_pos):
+    robot_instance.move(start_pos)                  # 테이블 위치로 이동
+    robot_instance.move_relative([0, 0, -180, 0, 0, 0])  # 16cm 하강
+    time.sleep(0.3)
+    robot_instance.open_grip()                      # 그리퍼 열기(내려놓기)
+    robot_instance.force_off()                      # force control 해제
+
+
+# ───────── 핵심 로직 (음성 메시지 받고 서버에 전송 + 화분 제어 통합) ─────────
+def voice_memory_with_robot(res_num, zone_number=1):  # zone_number도 받게 변경!
     tts("화분을 지정 위치로 가져옵니다")
     robot_instance = robot.Robot()
     move_flower(robot_instance, zone_number)
 
-    # 3) 메시지 남기기
     tts("문장을 남겨주세요")
     log_voice_msg("문장을 저장중..")
     log_voice_msg("마이크를 정면으로 바라보고 5초간 말씀해주세요")
     message = stt_with_save(duration=5)
     log_voice_msg(f"인식된 문장: {message}")
 
-    # 4) 메시지 파일 저장
-    audio_path = "message.wav"
+    audio_path = "/home/kim/ros2_ws/src/bloom_for_you/install/bloom_for_you/lib/python3.10/site-packages/message.wav"
     np.save("message.npy", np.array([message], dtype=object))
     log_voice_msg("message.npy로 저장 완료")
 
-    # 5) 서버에 예약번호·메시지·오디오 파일 form-data로 전송!
     try:
         with open(audio_path, 'rb') as audio_file:
             files = {'audio': audio_file}
-            data = {'res_num': res_num, 'message': message}
+            data = {'res_num': str(res_num), 'message': message}
             resp = requests.post(config.LOCAL_SIGNAL_URL, files=files, data=data)
             resp.raise_for_status()
             log_voice_msg("로컬 신호 전송 완료")
@@ -126,8 +104,9 @@ def voice_memory_with_robot():
         log_voice_msg(f"로컬 신호 전송 실패: {e}")
 
     tts("메시지가 저장되었습니다. 화분을 다시 제자리에 놓겠습니다.")
-    # 복귀동작 등은 네 코드에 없으니 필요하면 추가
+    log_voice_msg("화분 이동중..")
     tts("모든 작업이 끝났습니다.")
+    log_voice_msg("화분 원위치 완료")
     return True
 
 # ───────── ROS2: /flower_info 토픽 리스너 & 응답 퍼블리셔 ─────────
@@ -149,12 +128,12 @@ class VoiceMemoryTopicNode(Node):
     def callback(self, msg):
         if msg.command == 10:
             self.get_logger().info(f"[음성 녹음] 요청 감지! (id={msg.id})")
-            # zone_number를 msg에서 받아와서 넘기면 됨
-            robot_instance = robot.Robot()
-            move_flower(robot_instance, msg.zone_number)
-            # 이후 메시지 저장, 응답 publish 로직은 그대로
-            success = voice_memory_with_robot()
-            # 응답 퍼블리시 (command=11)
+            # ----- [중복 이동 제거: 아래 2줄 삭제] -----
+            # robot_instance = robot.Robot()
+            # move_flower(robot_instance, msg.zone_number)
+            # --------------------------------------
+            # 메시지 저장, 응답 publish 로직은 그대로 (zone_number도 전달)
+            success = voice_memory_with_robot(res_num=msg.id, zone_number=msg.zone_number)
             response = FlowerInfo()
             response.id = msg.id
             response.command = 11
@@ -180,7 +159,6 @@ def main():
             node.destroy_node()
             rclpy.shutdown()
     else:
-        # 일반 CLI 실행 시 자동 동작
         voice_memory_with_robot()
 
 if __name__ == "__main__":
