@@ -25,6 +25,10 @@ from std_msgs.msg import String
 
 """
 
+DEBUG_ON_OFF = 0 # 0: 디버그, 1: 일반
+
+
+
 class SpeechToCommand(Node):
     def __init__(self):
         super().__init__('speech_to_command_node')
@@ -48,7 +52,7 @@ class SpeechToCommand(Node):
     def wake_up(self):
         if self.WAKE_UP_STATE == 0:
             self.get_logger().info("SAY HELLO ROKEY TO START!!!")
-        
+
             # 🔊 오디오 스트림 열기
             p = pyaudio.PyAudio()
             stream = p.open(
@@ -66,14 +70,22 @@ class SpeechToCommand(Node):
                 buffer_size=1024
             )
             
-            # while not wakeup.is_wakeup():
-            #     pass
-            
-            input("enter to next")
+            if DEBUG_ON_OFF:
+                while not wakeup.is_wakeup():
+                    pass
+            else:
+                print("hello rokey 말하기 완료")
+                input("enter to next")
 
             self.WAKE_UP_STATE = 1
             print("WAKE UP!!")
-            tts.tts("네 안녕하세요!! 예약번호와 원하시는 명령을 말해주세요. 명령은 씨앗선택, 음성녹음, 포장이 있습니다")
+            
+            return_val = "네 안녕하세요!! 명령은 씨앗선택, 음성녹음, 포장이 있습니다. 예약번호와 원하시는 명령을 말해주세요."
+            if DEBUG_ON_OFF:
+                tts.tts(return_val)
+            else:
+                print(return_val)
+                input("enter to next")
 
         else:
             pass
@@ -81,17 +93,48 @@ class SpeechToCommand(Node):
     def listen_command(self):
         if self.WAKE_UP_STATE == 1:
             self.response = keyword_extraction.keyword_extraction("/home/we/rokey_ws/build/bloom_for_you/resource/get_command_prompt.txt")
-            # 음성 -> 커맨드 추출 실행
-            # return_val = tts.make_txt("예약번호는 {}입니다. {}을 고르셨습니다 이대로 진행할까요?", [1234, "씨앗선택"])
-            # tts.tts(return_val)
             
-            print(self.response)
-            # input("enter to end")
+            res_num, cmd_num = self.response.split('/')
+            res_num = int(res_num)
+            cmd_num = int(cmd_num)
 
+            if res_num == 0 or cmd_num == 0:
+                return_val = "잘못 입력하였습니다 다시 말해주세요"
+                
+                if DEBUG_ON_OFF:
+                    tts.tts(return_val)
+                else:
+                    print(return_val)
+                    input("enter to next")
+
+                self.WAKE_UP_STATE = 1
             
-            self.WAKE_UP_STATE = 2
-        else:
-            pass        
+            else:
+                if cmd_num == 1:
+                    temp_txt = "씨앗 선택"
+                elif cmd_num == 10:
+                    temp_txt = "음성 녹음"
+                elif cmd_num == 20:
+                    temp_txt = "포장"
+                
+                return_val = tts.make_txt("예약번호는 {}입니다. {}을 고르셨습니다", [res_num, temp_txt])
+                if DEBUG_ON_OFF:
+                    # 음성 -> 커맨드 추출 실행
+                    tts.tts(return_val)
+                    # # 음성 -> 커맨드 추출 실행, 다시 선택 버전
+                    # return_val = tts.make_txt("예약번호는 {}입니다. {}을 고르셨습니다 이대로 진행할까요?", [res_num, "cmd_num"])
+                    # tts.tts(return_val)            
+
+                else:
+                    print(return_val)
+                    input("enter to next")
+                                    
+
+                
+                
+
+                print(self.response)
+                self.WAKE_UP_STATE = 2
 
     def publish_command(self):
         if self.WAKE_UP_STATE == 2:
