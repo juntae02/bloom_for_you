@@ -3,6 +3,8 @@ import time
 import rclpy
 from rclpy.node import Node
 from ament_index_python.packages import get_package_share_directory
+import threading
+from rclpy.executors import MultiThreadedExecutor
 
 from bloom_for_you.function_modules.tts import tts
 from bloom_for_you_interfaces.msg import FlowerInfo
@@ -21,7 +23,6 @@ POS_ZONE1 = [108.99, -461.86, 197.16, 104.45, -178.30, -168.57]
 POS_ZONE2 = [-114.80, -460.45, 197.16, 69.36, 180.00, 163.36]
 POS_PLANT = [POS_TABLE, POS_ZONE1, POS_ZONE2]
 
-# POS_READY = [367.41, 8.00, 247.25, 20.15, -180.00, 20.00]
 POS_BAG = [360.00, -325.51, 225.75, 124.00, 180.00, -144.00] # 75 다운
 POS_BAG_DES = [350.00, 230.00, 345.00, 26.91, -180.00, 118.81]
 POS_CARD1 = [544.50, 247.54, 247.95, 55.85, 180.00, 150.87]
@@ -38,10 +39,10 @@ class FlowerWrapping(Node):
         self.cmd_sub = self.create_subscription(FlowerInfo, 'flower_info', self.wrap_flower, 10)
         self.cmd_pub = self.create_publisher(FlowerInfo, 'flower_info',qos_profile=10)
         self.card_cli = self.create_client(CardSrv,'cardsrv')
-        self.robot = robot.Robot()
+        # self.robot = robot.Robot()
         
-        self.robot.move_home()
-        self.robot.close_grip()
+        # self.robot.move_home()
+        # self.robot.close_grip()
 
 
     def wrap_flower(self, msg):
@@ -60,10 +61,13 @@ class FlowerWrapping(Node):
         tts("포장을 시작합니다.")
         self.get_logger().info("포장을 시작합니다.")
 
+    
         self._get_bag()
         self._get_flower()
-        # self._insert_card()
-        self._get_card()
+ 
+        threading.Thread(target=self._get_card).start()
+        # self._get_card()
+        self._insert_card()
         self._offer_bag()
 
         tts('포장이 완료되었습니다.')
@@ -73,26 +77,25 @@ class FlowerWrapping(Node):
     def _get_bag(self):
         self.get_logger().info("쇼핑백 가져오는 중...")
 
-        self.robot.move(POS_BAG)
-        self.robot.open_grip()
-        time.sleep(1)
-        self.robot.move_relative([0,0,-75,0,0,0])
-        self.robot.close_grip()
-        time.sleep(1)
-        # self.robot.move_relative([0,0,200,0,0,0])
-        self.robot.move(POS_BAG)
-        self.robot.move(POS_BAG_DES)
-        self.robot.move_relative([0,0,-75,0,0,0])
-        time.sleep(1)
-        self.robot.force_on_z(-10)
-        self.robot.check_touch(max=10)
-        self.robot.force_off()
+        # self.robot.move(POS_BAG)
+        # self.robot.open_grip()
+        # time.sleep(1)
+        # self.robot.move_relative([0,0,-75,0,0,0])
+        # self.robot.close_grip()
+        # time.sleep(1)
+        # self.robot.move(POS_BAG)
+        # self.robot.move(POS_BAG_DES)
+        # self.robot.move_relative([0,0,-75,0,0,0])
+        # time.sleep(1)
+        # self.robot.force_on_z(-10)
+        # self.robot.check_touch(max=10)
+        # self.robot.force_off()
 
-        self.robot.open_grip()
-        time.sleep(1)
-        self.robot.move_relative([0,0,50,0,0,0])
-        self.robot.move(POS_PLANT[0])
-        self.robot.close_grip()
+        # self.robot.open_grip()
+        # time.sleep(1)
+        # self.robot.move_relative([0,0,50,0,0,0])
+        # self.robot.move(POS_PLANT[0])
+        # self.robot.close_grip()
 
         self.get_logger().info("쇼핑백 픽업 완료")
         
@@ -100,34 +103,30 @@ class FlowerWrapping(Node):
     def _get_flower(self):
         self.get_logger().info("화분 가져오는 중...")
         
-        self.robot.move(POS_PLANT[0])
+        # self.robot.move(POS_PLANT[0])
 
-        self.robot.move(POS_PLANT[self.zone_number])
-        time.sleep(1.0)
-        self.robot.open_grip()
-        time.sleep(1.0)
-        self.robot.move_relative([0,0,-300,0,0,0])
-        time.sleep(1.0)
-        self.robot.close_grip()
-        time.sleep(1.0)
-        self.robot.move(POS_PLANT[self.zone_number])
-        time.sleep(1.0)
-        self.robot.move_relative([0,0,120,0,0,0])
-        self.robot.move(POS_TABLE2)
-        time.sleep(1.0)
-        # self.robot.move_relative([0,0,-20,0,0,0])
-        self.robot.move_relative([0,0,-200,0,0,0])
-        time.sleep(1.0)
-        # self.robot.force_on_z(-10)
+        # self.robot.move(POS_PLANT[self.zone_number])
         # time.sleep(1.0)
-        # self.robot.check_touch(min=5, max=30)
+        # self.robot.open_grip()
         # time.sleep(1.0)
-        self.robot.open_grip()
-        time.sleep(1.0)
-        self.robot.move(POS_TABLE2)
-        self.robot.close_grip()
+        # self.robot.move_relative([0,0,-300,0,0,0])
+        # time.sleep(1.0)
+        # self.robot.close_grip()
+        # time.sleep(1.0)
+        # self.robot.move(POS_PLANT[self.zone_number])
+        # time.sleep(1.0)
+        # self.robot.move_relative([0,0,120,0,0,0])
+        # self.robot.move(POS_TABLE2)
+        # time.sleep(1.0)
+        # self.robot.move_relative([0,0,-200,0,0,0])
+        # time.sleep(1.0)
+        # self.robot.open_grip()
+        # time.sleep(1.0)
+        # self.robot.move(POS_TABLE2)
+        # self.robot.close_grip()
 
         self.get_logger().info("화분 픽업 완료")
+
         
 
     def _get_card(self):
@@ -135,66 +134,68 @@ class FlowerWrapping(Node):
             self.get_logger().warning("카드 서버 준비 안됨")
 
         future = self.request_card_print()
-        future.add_done_callback(self._card_done_callback)
+        rclpy.spin_until_future_complete(self, future)
+
+        try:
+            response = future.result()
+            if response.success:
+                self.get_logger().info("카드 출력 완료됨")
+            else:
+                self.get_logger().warn("카드 출력 실패")
+        except Exception as e:
+            self.get_logger().warn(f"서비스 응답 실패: {e}")
         
 
     def _insert_card(self):
         self.get_logger().info("카드 넣는 중...")
-        self.robot.move(POS_PLANT[0])
-        time.sleep(1.0)
-        self.robot.move_relative([200,0,0,0,0,0])
-        time.sleep(1.0)
+        # self.robot.move(POS_PLANT[0])
+        # time.sleep(1.0)
+        # self.robot.move_relative([200,0,0,0,0,0])
+        # time.sleep(1.0)
    
-        self.robot.move(POS_CARD1)
-        time.sleep(1.0)
-        self.robot.open_grip()
-        time.sleep(1.0)
-        self.robot.move_relative([0,0,-160,0,0,0])
-        self.robot.close_grip()
-        time.sleep(1.0)
-        self.robot.move(POS_CARD1)
-        time.sleep(1.0)
-        self.robot.move(POS_CARD2)
-        time.sleep(1.0)
-        self.robot.move(POS_CARD3)
-        time.sleep(1.0)
-        self.robot.move_relative([0,0,-100,0,0,0])
-        time.sleep(1.0)
-        self.robot.open_grip()
+        # self.robot.move(POS_CARD1)
+        # time.sleep(1.0)
+        # self.robot.open_grip()
+        # time.sleep(1.0)
+        # self.robot.move_relative([0,0,-160,0,0,0])
+        # self.robot.close_grip()
+        # time.sleep(1.0)
+        # self.robot.move(POS_CARD1)
+        # time.sleep(1.0)
+        # self.robot.move(POS_CARD2)
+        # time.sleep(1.0)
+        # self.robot.move(POS_CARD3)
+        # time.sleep(1.0)
+        # self.robot.move_relative([0,0,-100,0,0,0])
+        # time.sleep(1.0)
+        # self.robot.open_grip()
 
-        self.robot.move(POS_PLANT[0])
+        # self.robot.move(POS_PLANT[0])
         self.get_logger().info("카드 넣기 완료")
         
 
     def _offer_bag(self):
         self.get_logger().info("사용자에게 꽃 전달 중...")
-        # self.robot.move_home()
+       
+        # self.robot.move(POS_PLANT[0])
+        # self.robot.open_grip()
+        # time.sleep(1)
+        # self.robot.move_relative([0,0,-70,0,0,0])
+        # self.robot.close_grip()
+        # time.sleep(1)
+     
+        # self.robot.move_relative([0,200,0,0,0,0])
+        # self.robot.open_grip()
+        # time.sleep(1)
+        # self.robot.move_relative([0,0,70,0,0,0])
+        # time.sleep(1)
+        # self.robot.move(POS_PLANT[0])
 
-        self.robot.move(POS_PLANT[0])
-        self.robot.open_grip()
-        time.sleep(1)
-        self.robot.move_relative([0,0,-70,0,0,0])
-        self.robot.close_grip()
-        time.sleep(1)
-        # self.robot.move_relative([0,0,20,0,0,0])
-
-        # self.robot.move(POS_PICKUP)
-        # self.robot.force_on_z(-10)
-        # self.robot.check_touch(max=10)
-        # self.robot.force_off()
-
-        self.robot.move_relative([0,200,0,0,0,0])
-        self.robot.open_grip()
-        time.sleep(1)
-        self.robot.move_relative([0,0,70,0,0,0])
-        time.sleep(1)
-        self.robot.move(POS_PLANT[0])
-        # self.robot.move(POS_PICKUP)
-        self.robot.close_grip()
-        time.sleep(1)
+        # self.robot.close_grip()
+        # time.sleep(1)
         
 
-        self.complete_wrap()
+        # self.complete_wrap()
         self.get_logger().info("사용자에게 전달 완료")
         
         
@@ -217,7 +218,7 @@ class FlowerWrapping(Node):
         return future
     
 
-    def _card_done_callback(self, future):
+    # def _card_done_callback(self, future):
         try:
             response = future.result()
         except Exception as e:
@@ -249,8 +250,11 @@ class FlowerWrapping(Node):
 def main(args=None):
     # rclpy.init(args=args)     # robot node안에서 실행
     node = FlowerWrapping()
+
+    executor = MultiThreadedExecutor()
+    executor.add_node(node)
     try:
-        rclpy.spin(node)
+        executor.spin()
     finally:
         node.destroy_node()
         rclpy.shutdown()
