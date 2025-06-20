@@ -37,12 +37,16 @@ class ScenarioManager(Node):
         self.command_queue = []
         self.ROBOT_STATE = 0 # 0은 사용 가능, 1은 사용 불가
         self.LISTEN_COMMAND_STATE = 0
-        
-        self.flower_info_list = []
-        flower_temp = Flower(id = 1234, zone_number=1)
-        self.flower_info_list.append(flower_temp)
 
-        self.scenario_zone_number = [0]
+        self.flower_info_list = []
+
+        # # 그냥 버전
+        # self.scenario_zone_number = [0]
+
+        # 추가 버전
+        flower_temp = Flower(id = 1234, zone_number=1, flower_name="해바라기", flower_meaning="새출발, 희망", growth_duration_days=30, watering_cycle=10000, growth_state=0)
+        self.flower_info_list.append(flower_temp)
+        self.scenario_zone_number = [0, 1]
 
         # ROS 퍼블리셔 및 서브스크라이버
         self.publisher = self.create_publisher(FlowerInfo, 'flower_info', 10)

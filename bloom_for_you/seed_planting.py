@@ -232,7 +232,9 @@ class SeedPlanting(Node):
     def cmd_callback(self, msg):     
         self.command = msg.command
         if self.command != CMD_SEED:
+            self.get_logger().info("다른 메시지 수신")
             return
+        self.get_logger().info("씨앗 메시지 수신")
         self.id = msg.id
         self.zone_number = msg.zone_number
         self.flower_name = msg.flower_name
@@ -272,7 +274,7 @@ class SeedPlanting(Node):
 
         self.robot_instance.move(POS_TABLE2)
         time.sleep(1.0)
-        self.robot_instance.move_relative([0.0, 0.0, -200.0, 0.0, 0.0, 0.0])
+        self.robot_instance.move_relative([0.0, 0.0, -220.0, 0.0, 0.0, 0.0])
         time.sleep(1.0)
         self.robot_instance.open_grip()
         time.sleep(1.0)
