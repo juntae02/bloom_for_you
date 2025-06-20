@@ -99,15 +99,15 @@ def reverse_move_flower(robot_instance, zone_number):
 
 # ───────── 핵심 로직 (음성 메시지 받고 서버에 전송 + 화분 제어 통합) ─────────
 def voice_memory_with_robot(res_num, zone_number=1):  # zone_number도 받게 변경!
-    # tts("화분을 지정 위치로 가져옵니다")
-    # robot_instance = robot.Robot()
-    # move_flower(robot_instance, zone_number)
+    tts("화분을 지정 위치로 가져옵니다")
+    robot_instance = robot.Robot()
+    move_flower(robot_instance, zone_number)
 
-    # tts("문장을 남겨주세요")
-    # log_voice_msg("문장을 저장중..")
-    # log_voice_msg("마이크를 정면으로 바라보고 5초간 말씀해주세요")
-    # message = stt_with_save(duration=5)
-    # log_voice_msg(f"인식된 문장: {message}")
+    tts("문장을 남겨주세요")
+    log_voice_msg("문장을 저장중..")
+    log_voice_msg("마이크를 정면으로 바라보고 5초간 말씀해주세요")
+    message = stt_with_save(duration=5)
+    log_voice_msg(f"인식된 문장: {message}")
     
     # 상대경로
     package_share_dir = get_package_share_directory('bloom_for_you')
@@ -116,27 +116,27 @@ def voice_memory_with_robot(res_num, zone_number=1):  # zone_number도 받게 �
     # 절대 경로
     # audio_path = "/home/kim/ros2_ws/src/bloom_for_you/install/bloom_for_you/lib/python3.10/site-packages/message.wav"
     
-    # np.save("message.npy", np.array([message], dtype=object))
-    # log_voice_msg("message.npy로 저장 완료")
+    np.save("message.npy", np.array([message], dtype=object))
+    log_voice_msg("message.npy로 저장 완료")
 
-    # try:
-    #     with open(audio_path, 'rb') as audio_file:
-    #         files = {'audio': audio_file}
-    #         data = {'res_num': str(res_num), 'message': message}
-    #         resp = requests.post(config.LOCAL_SIGNAL_URL, files=files, data=data)
-    #         resp.raise_for_status()
-    #         log_voice_msg("로컬 신호 전송 완료")
-    # except Exception as e:
-    #     log_voice_msg(f"로컬 신호 전송 실패: {e}")
+    try:
+        with open(audio_path, 'rb') as audio_file:
+            files = {'audio': audio_file}
+            data = {'res_num': str(res_num), 'message': message}
+            resp = requests.post(config.LOCAL_SIGNAL_URL, files=files, data=data)
+            resp.raise_for_status()
+            log_voice_msg("로컬 신호 전송 완료")
+    except Exception as e:
+        log_voice_msg(f"로컬 신호 전송 실패: {e}")
 
-    # tts("메시지가 저장되었습니다. 화분을 다시 제자리에 놓겠습니다.")
-    # log_voice_msg("화분 이동중..")
-    # tts("모든 작업이 끝났습니다.")
-    # time.sleep(3)   # 3초 대기
+    tts("메시지가 저장되었습니다. 화분을 다시 제자리에 놓겠습니다.")
+    log_voice_msg("화분 이동중..")
+    tts("모든 작업이 끝났습니다.")
+    time.sleep(3)   # 3초 대기
 
-    # reverse_move_flower(robot_instance, zone_number)  # 역동작 수행
-    # log_voice_msg("화분 원위치 완료")
-    # return True
+    reverse_move_flower(robot_instance, zone_number)  # 역동작 수행
+    log_voice_msg("화분 원위치 완료")
+    return True
 
 # ───────── ROS2: /flower_info 토픽 리스너 & 응답 퍼블리셔 ─────────
 import rclpy
