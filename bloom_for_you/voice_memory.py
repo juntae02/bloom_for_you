@@ -71,7 +71,7 @@ def move_flower(robot_instance, zone_number):
 
 def descend_and_release(robot_instance, start_pos):
     robot_instance.move(start_pos)                  # 테이블 위치로 이동
-    robot_instance.move_relative([0, 0, -180, 0, 0, 0])  # 18cm 하강
+    robot_instance.move_relative([0, 0, -220, 0, 0, 0])  # 18cm 하강
     time.sleep(0.3)
     robot_instance.open_grip()                      # 그리퍼 열기(내려놓기)
     robot_instance.force_off()                      # force control 해제
@@ -82,7 +82,7 @@ def reverse_move_flower(robot_instance, zone_number):
     robot_instance.move(POS_TABLE2)                 # 테이블 위치로 이동
     robot_instance.open_grip()                      # 혹시 열려있지 않으면 확실히 열기
     time.sleep(1.0)
-    robot_instance.move_relative([0, 0, -180, 0, 0, 0])   # 18cm 아래로 내리기
+    robot_instance.move_relative([0, 0, -220, 0, 0, 0])   # 18cm 아래로 내리기
     time.sleep(0.5)
     robot_instance.close_grip()                     # 집기
     time.sleep(1.0)
