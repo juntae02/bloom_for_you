@@ -40,16 +40,22 @@ class FlowerWrapping(Node):
         self.cmd_pub = self.create_publisher(FlowerInfo, 'flower_info',qos_profile=10)
         self.card_cli = self.create_client(CardSrv,'cardsrv')
         self.robot = robot.Robot()
-        
+        self.listen_state=0
         self.robot.move_home()
         self.robot.close_grip()
+        self.state_timer = self.create_timer(1.0, self.check_state)
 
+    def check_state(self):
+        self.get_logger().info(f"state = {self.listen_state}")
 
     def wrap_flower(self, msg):
+        
         self.command = msg.command
         if self.command != CMD_START_WRAPPING:
+            self.listen_state = 1
             return
         
+        self.listen_state = 1
         self.id = msg.id
         self.zone_number = msg.zone_number
         self.flower_name = msg.flower_name

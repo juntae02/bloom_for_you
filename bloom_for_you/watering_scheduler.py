@@ -42,6 +42,8 @@ FLOWER = ["해바라기", "튤립"]
 class FlowerWatering(Node):
     def __init__(self):
         super().__init__("watering_node")
+        self.listen_state = 0
+
         self.cmd_sub = self.create_subscription(FlowerInfo, 'flower_info', self.water_the_flower, 10)
         self.growth_pub = self.create_publisher(FlowerInfo, 'flower_info', 10)
         self.img_node = ImgNode()
@@ -50,13 +52,19 @@ class FlowerWatering(Node):
         self.robot.open_grip()
         self.robot.move_home()
         self.robot.close_grip()
-
+        self.state_timer = self.create_timer(1.0, self.check_state)
+    
+    def check_state(self):
+        self.get_logger().info(f"state = {self.listen_state}")
 
     def water_the_flower(self, msg):
+        self.listen_state = 1
         self.command = msg.command
         if self.command != CMD_START_WATERING:
+            self.listen_state = 2
             return
-    
+        
+        self.listen_state = 3
         self.id = msg.id
         self.zone_number = msg.zone_number
         self.flower_name = msg.flower_name

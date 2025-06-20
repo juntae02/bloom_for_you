@@ -182,6 +182,7 @@ class ScenarioManager(Node):
                 if flower_.command == 3:
                     if flower_.zone_number == 1:
                         self.timestamp = 0
+                        # self.flower_info_list[0].watering_cycle = 10
                         flower_.watering_cycle = 10
                     else:
                         flower_.watering_cycle = 10000
@@ -189,7 +190,6 @@ class ScenarioManager(Node):
                 # 물주기 완료면 주기 1000으로 늘리기
                 if flower_.command == 31:
                     flower_.watering_cycle = 10000
-                    
 
                 # 포장 완료면 플라워 리스트에서 삭제 해야됨
                 if flower_.command == 22:

@@ -95,7 +95,11 @@ def reverse_move_flower(robot_instance, zone_number):
     time.sleep(0.5)
     robot_instance.open_grip()                      # 그리퍼 열기(놓기)
     robot_instance.force_off()
+    time.sleep(0.5)
+    robot_instance.move(POS_PLANT[zone_number])  
+    robot_instance.move(POS_PLANT[0])  
     log_voice_msg("화분 원위치 완료")
+    tts("모든 작업이 끝났습니다.")
 
 # ───────── 핵심 로직 (음성 메시지 받고 서버에 전송 + 화분 제어 통합) ─────────
 def voice_memory_with_robot(res_num, zone_number=1):  # zone_number도 받게 변경!
@@ -131,11 +135,12 @@ def voice_memory_with_robot(res_num, zone_number=1):  # zone_number도 받게 �
 
     tts("메시지가 저장되었습니다. 화분을 다시 제자리에 놓겠습니다.")
     log_voice_msg("화분 이동중..")
-    tts("모든 작업이 끝났습니다.")
+    
     time.sleep(3)   # 3초 대기
 
     reverse_move_flower(robot_instance, zone_number)  # 역동작 수행
     log_voice_msg("화분 원위치 완료")
+    
     return True
 
 # ───────── ROS2: /flower_info 토픽 리스너 & 응답 퍼블리셔 ─────────
