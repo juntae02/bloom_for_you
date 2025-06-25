@@ -49,14 +49,20 @@ class ScenarioManager(Node):
         self.scenario_zone_number = [0, 1]
 
         # ROS 퍼블리셔 및 서브스크라이버
+        # 각 노드와 주고 받는 통신
         self.publisher = self.create_publisher(FlowerInfo, 'flower_info', 10)
-        self.command_subscriber = self.create_subscription(String,'listen_command',self.listen_command_callback,10)
         self.flower_info_subscriber = self.create_subscription(FlowerInfo,'flower_info',self.flower_info_callback,10)
         
+        # 음성 명령 수신 후 queue에 추가
+        self.command_subscriber = self.create_subscription(String,'listen_command',self.listen_command_callback,10)
+        
+        # 주기적으로 꽃 자동 급수 명령 queue에 입력
         self.watering_timer = self.create_timer(1.0, self.watering_scheduler)
-        self.run_command_timer = self.create_timer(1.0, self.run_command)
-
-        self.state_timer = self.create_timer(1.0, self.check_state)
+        # 입력받은 queue 명령을 순차적 실행
+        self.run_command_timer = self.create_timer(1.0, self.run_command) 
+        
+        # 상태 체크용 타이머
+        self.state_timer = self.create_timer(1.0, self.check_state) 
         
     def check_state(self):
         self.get_logger().info(f"state = {self.ROBOT_STATE} command len = {len(self.command_queue)}, flower len = {len(self.flower_info_list)}")

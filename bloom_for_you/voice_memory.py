@@ -49,8 +49,10 @@ def authenticate() -> str | None:
 
 # ───────── 천천히 하강하며 힘 감지 후 그리퍼 여는 함수 (check_force_condition 방식) ─────────
 import time
-def move_flower(robot_instance, zone_number):
+def move_flower(robot_instance: robot.Robot, zone_number):
     log_voice_msg("화분 가져오는 중...")
+    
+    robot_instance.move_home()
 
     robot_instance.move(POS_PLANT[0])               # 출발점으로 이동
     robot_instance.move(POS_PLANT[zone_number])     # zone으로 이동
@@ -79,11 +81,27 @@ def descend_and_release(robot_instance, start_pos):
     robot_instance.open_grip()                      # 그리퍼 열기(내려놓기)
     robot_instance.force_off()                      # force control 해제
 
-def reverse_move_flower(robot_instance, zone_number):
+def reverse_move_flower(robot_instance: robot.Robot, zone_number):
     log_voice_msg("화분을 원위치로 옮기는 중...")
-
-    robot_instance.move(POS_TABLE2)                 # 테이블 위치로 이동
-    robot_instance.open_grip()                      # 혹시 열려있지 않으면 확실히 열기
+    
+    # # before
+    # robot_instance.move(POS_TABLE2)                 # 테이블 위치로 이동
+    # robot_instance.open_grip()                      # 혹시 열려있지 않으면 확실히 열기
+    # time.sleep(1.0)
+    # robot_instance.move_relative([0, 0, -180, 0, 0, 0])   # 18cm 아래로 내리기
+    # time.sleep(0.5)
+    # robot_instance.close_grip()                     # 집기
+    # time.sleep(1.0)
+    # robot_instance.move(POS_TABLE2)                 # 테이블로 복귀(확실히)
+    # robot_instance.move(POS_PLANT[zone_number])     # 원래 zone으로 이동
+    # robot_instance.move_relative([0, 0, -300, 0, 0, 0])   # 30cm 내려놓기
+    # time.sleep(0.5)
+    # robot_instance.open_grip()                      # 그리퍼 열기(놓기)
+    # robot_instance.force_off()
+    # log_voice_msg("화분 원위치 완료")
+    
+    import time
+    robot_instance.move(POS_PLANT[0])
     time.sleep(1.0)
     robot_instance.move_relative([0, 0, -220, 0, 0, 0])   # 18cm 아래로 내리기
     time.sleep(0.5)
