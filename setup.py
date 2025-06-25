@@ -6,9 +6,12 @@ package_name = 'bloom_for_you'
 
 
 resource_files = [
-    (os.path.join('share', package_name, os.path.dirname(path)), [path])
+    (
+        os.path.join('share', package_name, os.path.dirname(path)),
+        [path]
+    )
     for path in glob('resource/**/*', recursive=True)
-    if os.path.isfile(path)
+    if os.path.isfile(path) and os.path.basename(path) != package_name  # 마커 제외
 ]
 
 setup(
