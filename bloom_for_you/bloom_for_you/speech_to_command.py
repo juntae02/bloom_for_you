@@ -135,10 +135,6 @@ class SpeechToCommand(Node):
                 else:
                     print(return_val)
                     input("enter to next")
-                                    
-
-                
-                
 
                 print(self.response)
                 self.WAKE_UP_STATE = 2
