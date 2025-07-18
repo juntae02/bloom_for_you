@@ -1,6 +1,6 @@
 # 🌸 Bloom for you - 꽃 선물 서비스
 
-![Project Banner](./assets/banner.png)
+<img src="./bloom_for_you/resource/git_readme/congrats.png" alt="Project Banner" width="200"/>
 
 > 특별한 사람을 위해 "키움의 과정을 선물하는" 꽃 선물 서비스, Bloom for you 🎁  
 > OpenAI API를 활용한 상황별 꽃 선택 서비스, 로봇팔과 사진 기록을 통해 키우는 과정을 기록 및 선물
@@ -9,7 +9,7 @@
 
 ## 🎥 데모 영상
 
-[![Demo](https://img.youtube.com/vi/abc123XYZ456/0.jpg)](https://www.youtube.com/watch?v=abc123XYZ456)  
+[![Demo](https://github.com/d-1world/bloom_for_you/0.jpg)](https://github.com/d-1world/bloom_for_you)  
 👉 클릭해서 시연 영상 보기
 
 ---
@@ -53,17 +53,28 @@
 │       ├── 🎛️ scenario_manager: 전체 시나리오를 커맨드를 받아서 제어
 │       ├── 🎙️ speech_to_command: 음성 메시지 입력으로 커맨드 scenario_manager에 전달
 │   ├── 🌱 씨앗 선택
-│       ├── 🌸 flower_recommender: 꽃 추천
-│       ├── 🌾 seed_planting: 꽃 심기
+│       ├── 🌸 flower_recommender: 음성 메시지를 통한 꽃 추천
+│       ├── 🌾 seed_planting: 로봇팔 제어를 통한 씨앗 심기
 │   ├── 🌿 재배
-│       ├── 🎧 voice_memory: 음성 메시지 녹음
-│       └── 💧 watering_scheduler: 주기적으로 물 주기
+│       ├── 🎧 voice_memory: 재배 과정 중 음성 메시지 녹음
+│       └── 💧 watering_scheduler: 주기적으로 물 주기 기능 실행
 │   ├── 🎁 포장
-│       ├── 📦 flower_wrapping: 꽃 포장
-│       └── 📝 make_letter_card: 내용 요약된 card 생성
+│       ├── 📦 flower_wrapping: 로봇팔 제어를 통한 꽃 포장
+│       └── 📝 make_letter_card: 저장된 음성 메시지 요약 + qr코드 입력된 card 생성
 │   ├── ⚙️ 백그라운드 실행
 │       ├── 🦾 set_robot: 커맨드 + 타겟 입력 시 pick and place
-│       ├── 🌐 set_server: 서버 set up
+│       ├── 🌐 set_server: qr 코드로 접속하는 서버 실행
 │       └── 🕵️ set_yolo: YOLO 모델 set up
 │
-└── 📄 README.md
+└── 📄 README.md   
+```
+
+
+## 🧑‍💻 Contributor
+
+| 이름 | 역할 | GitHub |
+|------|------|--------|
+| 위석환 | 중앙제어 / 팀 조율 | [@clarobit](https://github.com/clarobit) |
+| 지예은 | Function Modules 설계 / 재배(물 주기) / 포장(꽃 포장) | [@yeyeyeyeyeyeun](https://github.com/yeyeyeyeyeyeun) |
+| 박준태 | 씨앗 선택(꽃 추천, 씨앗 심기)  | [@juntae02](https://github.com/juntae02) |
+| 김요한 | 재배(음성 메시지 녹음) / 포장(card 생성) / 백그라운드 실행(서버 실행) | [@KIMYOHAN60](https://github.com/KIMYOHAN60) |
