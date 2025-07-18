@@ -9,7 +9,7 @@
 
 ## 🎥 데모 영상
 
-[![Demo](https://github.com/d-1world/bloom_for_you/0.jpg)](https://github.com/d-1world/bloom_for_you)  
+[![Demo](https://youtu.be/ftucMoKNOY0/0.jpg)](https://youtu.be/ftucMoKNOY0)  
 👉 클릭해서 시연 영상 보기
 
 ---
