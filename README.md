@@ -7,9 +7,8 @@
 
 ---
 
-## 🎥 데모 영상
-
-[![Demo](https://youtu.be/ftucMoKNOY0/0.jpg)](https://youtu.be/ftucMoKNOY0)  
+## 🎥 시연 영상
+- 영상 링크: [Draw](https://youtu.be/ftucMoKNOY0)
 👉 클릭해서 시연 영상 보기
 
 ---
