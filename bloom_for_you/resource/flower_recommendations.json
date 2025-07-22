@@ -8,7 +8,7 @@
                 "flower_meaning": "축복, 사랑",
                 "growth_duration_days": 30,
                 "watering_cycle": 3,              
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/rose.jpeg"                
+                "image_url": "/rose.jpeg"                
             },
             {
                 "period": "1-3개월",
@@ -16,7 +16,7 @@
                 "flower_meaning": "감사, 우정",
                 "growth_duration_days": 60,
                 "watering_cycle": 4,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/carnation.jpeg"
+                "image_url": "/carnation.jpeg"
             },
             {
                 "period": "4-6개월",
@@ -24,7 +24,7 @@
                 "flower_meaning": "순수함, 희망",
                 "growth_duration_days": 90,
                 "watering_cycle": 5,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/freesia.jpg"
+                "image_url": "/freesia.jpg"
             },
             {
                 "period": "7-9개월",
@@ -32,7 +32,7 @@
                 "flower_meaning": "새출발, 희망",
                 "growth_duration_days": 120,
                 "watering_cycle": 6,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/daffodil.jpeg"
+                "image_url": "/daffodil.jpeg"
             },
             {
                 "period": "10-12개월",
@@ -40,7 +40,7 @@
                 "flower_meaning": "부귀, 행복",
                 "growth_duration_days": 150,
                 "watering_cycle": 7,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/peony.jpeg"
+                "image_url": "/peony.jpeg"
             },
             {
                 "period": "1년이상",
@@ -48,7 +48,7 @@
                 "flower_meaning": "장수, 우아함",
                 "growth_duration_days": 180,
                 "watering_cycle": 7,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/camellia.jpg"
+                "image_url": "/camellia.jpg"
             }
         ]
     },
@@ -61,7 +61,7 @@
                 "flower_meaning": "새출발, 희망",
                 "growth_duration_days": 30,
                 "watering_cycle": 4,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/sunflower.jpg"
+                "image_url": "/sunflower.jpg"
             },
             {
                 "period": "1-3개월",
@@ -69,7 +69,7 @@
                 "flower_meaning": "지혜, 희망",
                 "growth_duration_days": 60,
                 "watering_cycle": 5,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/iris.jpeg"
+                "image_url": "/iris.jpeg"
             },
             {
                 "period": "4-6개월",
@@ -77,7 +77,7 @@
                 "flower_meaning": "진솔, 감사",
                 "growth_duration_days": 90,
                 "watering_cycle": 6,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/hydrangea.jpg"
+                "image_url": "/hydrangea.jpg"
             },
             {
                 "period": "7-9개월",
@@ -85,7 +85,7 @@
                 "flower_meaning": "우아함, 희망찬 미래",
                 "growth_duration_days": 120,
                 "watering_cycle": 7,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/magnolia.jpeg"
+                "image_url": "/magnolia.jpeg"
             },
             {
                 "period": "10-12개월",
@@ -93,7 +93,7 @@
                 "flower_meaning": "우정, 감사",
                 "growth_duration_days": 150,
                 "watering_cycle": 7,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/camellia.jpg"
+                "image_url": "/camellia.jpg"
             },
             {
                 "period": "1년이상",
@@ -101,7 +101,7 @@
                 "flower_meaning": "성취, 인내",
                 "growth_duration_days": 180,
                 "watering_cycle": 7,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/chrysanthemum.jpeg"
+                "image_url": "/chrysanthemum.jpeg"
             }
         ]
     },
@@ -114,7 +114,7 @@
                 "flower_meaning": "감사, 우정",
                 "growth_duration_days": 30,
                 "watering_cycle": 3,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/gerbera.jpg"
+                "image_url": "/gerbera.jpg"
             },
             {
                 "period": "1-3개월",
@@ -122,7 +122,7 @@
                 "flower_meaning": "순진함, 감사",
                 "growth_duration_days": 60,
                 "watering_cycle": 4,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/freesia.jpg"
+                "image_url": "/freesia.jpg"
             },
             {
                 "period": "4-6개월",
@@ -130,7 +130,7 @@
                 "flower_meaning": "존경, 감사",
                 "growth_duration_days": 90,
                 "watering_cycle": 5,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/daffodil.jpeg"
+                "image_url": "/daffodil.jpeg"
             },
             {
                 "period": "7-9개월",
@@ -138,7 +138,7 @@
                 "flower_meaning": "감동, 우아함",
                 "growth_duration_days": 120,
                 "watering_cycle": 6,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/lisianthus.jpg"
+                "image_url": "/lisianthus.jpg"
             },
             {
                 "period": "10-12개월",
@@ -146,7 +146,7 @@
                 "flower_meaning": "감사, 친절",
                 "growth_duration_days": 150,
                 "watering_cycle": 7,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/begonia.jpg"
+                "image_url": "/begonia.jpg"
             },
             {
                 "period": "1년이상",
@@ -154,7 +154,7 @@
                 "flower_meaning": "순수, 감사",
                 "growth_duration_days": 180,
                 "watering_cycle": 7,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/calla.jpg"
+                "image_url": "/calla.jpg"
             }
         ]
     },
@@ -167,7 +167,7 @@
                 "flower_meaning": "축복, 사랑",
                 "growth_duration_days": 30,
                 "watering_cycle": 3,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/rose.jpeg"
+                "image_url": "/rose.jpeg"
             },
             {
                 "period": "1-3개월",
@@ -175,7 +175,7 @@
                 "flower_meaning": "감동, 우정",
                 "growth_duration_days": 60,
                 "watering_cycle": 4,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/carnation.jpeg"
+                "image_url": "/carnation.jpeg"
             },
             {
                 "period": "4-6개월",
@@ -183,7 +183,7 @@
                 "flower_meaning": "환희, 희망",
                 "growth_duration_days": 90,
                 "watering_cycle": 5,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/tulip.jpeg"
+                "image_url": "/tulip.jpeg"
             },
             {
                 "period": "7-9개월",
@@ -191,7 +191,7 @@
                 "flower_meaning": "승리, 희망",
                 "growth_duration_days": 120,
                 "watering_cycle": 6,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/morning_glory.jpg"
+                "image_url": "/morning_glory.jpg"
             },
             {
                 "period": "10-12개월",
@@ -199,7 +199,7 @@
                 "flower_meaning": "우아함, 새로운 만남",
                 "growth_duration_days": 150,
                 "watering_cycle": 7,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/magnolia.jpeg"
+                "image_url": "/magnolia.jpeg"
             },
             {
                 "period": "1년이상",
@@ -207,7 +207,7 @@
                 "flower_meaning": "장수, 우아함",
                 "growth_duration_days": 180,
                 "watering_cycle": 7,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/camellia.jpg"
+                "image_url": "/camellia.jpg"
             }
         ]
     },
@@ -220,7 +220,7 @@
                 "flower_meaning": "위로, 희망",
                 "growth_duration_days": 30,
                 "watering_cycle": 3,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/chrysanthemum.jpeg"
+                "image_url": "/chrysanthemum.jpeg"
             },
             {
                 "period": "1-3개월",
@@ -228,7 +228,7 @@
                 "flower_meaning": "순수, 우정",
                 "growth_duration_days": 60,
                 "watering_cycle": 4,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/daisy.jpg"
+                "image_url": "/daisy.jpg"
             },
             {
                 "period": "4-6개월",
@@ -236,7 +236,7 @@
                 "flower_meaning": "우아함, 인내",
                 "growth_duration_days": 90,
                 "watering_cycle": 5,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/magnolia.jpeg"
+                "image_url": "/magnolia.jpeg"
             },
             {
                 "period": "7-9개월",
@@ -244,7 +244,7 @@
                 "flower_meaning": "겸손, 희망",
                 "growth_duration_days": 120,
                 "watering_cycle": 6,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/violet.jpg"
+                "image_url": "/violet.jpg"
             },
             {
                 "period": "10-12개월",
@@ -252,7 +252,7 @@
                 "flower_meaning": "위로, 희생",
                 "growth_duration_days": 150,
                 "watering_cycle": 7,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/anemone.jpeg"
+                "image_url": "/anemone.jpeg"
             },
             {
                 "period": "1년이상",
@@ -260,7 +260,7 @@
                 "flower_meaning": "우정, 믿음",
                 "growth_duration_days": 180,
                 "watering_cycle": 7,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/ivy.jpeg"
+                "image_url": "/ivy.jpeg"
             }
         ]
     },
@@ -273,7 +273,7 @@
                 "flower_meaning": "순결, 희생",
                 "growth_duration_days": 30,
                 "watering_cycle": 3,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/lily.jpg"
+                "image_url": "/lily.jpg"
             },
             {
                 "period": "1-3개월",
@@ -281,7 +281,7 @@
                 "flower_meaning": "사랑, 아름다움",
                 "growth_duration_days": 60,
                 "watering_cycle": 4,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/rose.jpeg"
+                "image_url": "/rose.jpeg"
             },
             {
                 "period": "4-6개월",
@@ -289,7 +289,7 @@
                 "flower_meaning": "행복, 부귀",
                 "growth_duration_days": 90,
                 "watering_cycle": 5,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/peony.jpeg"
+                "image_url": "/peony.jpeg"
             },
             {
                 "period": "7-9개월",
@@ -297,7 +297,7 @@
                 "flower_meaning": "우아, 헌신",
                 "growth_duration_days": 120,
                 "watering_cycle": 6,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/camellia.jpg"
+                "image_url": "/camellia.jpg"
             },
             {
                 "period": "10-12개월",
@@ -305,7 +305,7 @@
                 "flower_meaning": "우아함, 승리",
                 "growth_duration_days": 150,
                 "watering_cycle": 7,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/orchid.jpeg"
+                "image_url": "/orchid.jpeg"
             },
             {
                 "period": "1년이상",
@@ -313,7 +313,7 @@
                 "flower_meaning": "변치 않는 사랑",
                 "growth_duration_days": 180,
                 "watering_cycle": 7,
-                "image_url": "/home/rokey/ros2_ws/src/bloom_for_you/resource/flowers_img/camellia.jpg"
+                "image_url": "/camellia.jpg"
             }
         ]
     }

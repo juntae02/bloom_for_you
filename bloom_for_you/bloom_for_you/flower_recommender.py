@@ -8,14 +8,13 @@ import warnings
 import time
 import json
 import threading
-
 from langchain.prompts import PromptTemplate
 from std_msgs.msg import Int32
 from bloom_for_you.function_modules.keyword_extraction import keyword_extraction
 from bloom_for_you.function_modules.tts import tts
 from bloom_for_you_interfaces.msg import FlowerInfo
 
-
+# Kivy
 from kivy.app import App
 from kivy.uix.image import Image
 from kivy.uix.button import Button
@@ -27,10 +26,13 @@ from kivy.uix.progressbar import ProgressBar
 from kivy.uix.widget import Widget
 
 openai_api_key = os.getenv("OPENAI_API_KEY")
+# 상대경로 지정
 current_dir = os.getcwd()
-prompt_path = current_dir + "/src/bloom_for_you/resource/recommender_prompt.txt"
-json_path = current_dir + "/src/bloom_for_you/resource/flower_recommendations.json"
-font_path = current_dir + "/src/bloom_for_you/resource/font/NanumGothic-Regular.ttf"
+resource_path = current_dir + "/src/bloom_for_you/bloom_for_you/resource"
+prompt_path = resource_path + "/prompt/recommender_prompt.txt"
+json_path = resource_path + "/flower_recommendations.json"
+font_path = resource_path + "/font/NanumGothic-Regular.ttf"
+img_path = resource_path + "/flowers_img"
 
 CMD_RMD = 1 # 꽃 추천 노드 실행
 
@@ -44,6 +46,7 @@ class ExtractKeyword(Node):
         self.msg_cmd = None
 
     def cmd_callback(self, msg):
+        # subscribe하는 Topic의 command가 1일 때만 실행
         if msg.command == CMD_RMD:
             self.get_logger().info('Command 1 received, triggering main.')
             self.msg_id = msg.id
@@ -51,6 +54,7 @@ class ExtractKeyword(Node):
             self.msg_zone = msg.zone_number
             self.cmd_received.set()
 
+    # 키워드 추출
     def extract_keyword(self):
         response = keyword_extraction(prompt_path)
         result = response.strip().split("/")
@@ -68,9 +72,8 @@ class ExtractKeyword(Node):
         
         return object, destination
     
-## 기념일까지의 기간이 짧을 때는 예외처리 하기  
-# => 그냥 일단 시나리오 상으로 만족했다고 하기  
-
+    # 꽃 추천
+    # json 파일에서 추출한 키워드와 맞는 꽃 불러오기
     def find_flower(self, flower_data, object, destination):
         for item in flower_data:
             if item["keyword"] == object:
@@ -84,15 +87,17 @@ class ExtractKeyword(Node):
                             "flower_meaning": p["flower_meaning"],
                             "growth_duration_days": p["growth_duration_days"],
                             "watering_cycle": p["watering_cycle"],
-                            "image_url": p["image_url"]
+                            "image_url": img_path + p["image_url"]
                         }
                         return flower
         return None
 
 
-## 추천 꽃 화면 출력 클래스
+## 추천 꽃 GUI 화면 클래스
 class FlowerApp(App):
-    """추출된 정보나 조건과 매칭된 꽃 데이터를 GUI로 보여줌"""  
+    """추출된 키워드와 매칭된 꽃 데이터를 GUI로 보여줌
+        선택 버튼을 누를 시, 씨앗 심기 노드에 토픽 발행
+        재선택 버튼 누를 시, 재질문"""  
 
     def __init__(self, flower, node, **kwargs):
         """flower 정보는 main에서 넘깁니다.""" 
@@ -100,18 +105,17 @@ class FlowerApp(App):
         self.flower = flower 
         self.node = node
         self.redo = False   # 재선택 확인용
-        # 퍼블리셔 생성
         self.publisher = self.node.create_publisher(FlowerInfo, 'flower_info', 10)
 
     def build(self):
         """GUI Layout 생성""" 
-        # tts("꽃이 마음에 드시나요?")
+        tts("꽃이 마음에 드시나요?")
         self.title = "bloom_for_you"
 
         layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
         # 흰색 배경 추가
         with layout.canvas.before:
-            Color(1, 1, 1, 1)  # 흰색
+            Color(1, 1, 1, 1) 
             self.rect = Rectangle(pos=layout.pos, size=layout.size)
 
         # 윈도우 사이즈 변경시에도 흰색 영역 변경
@@ -136,7 +140,6 @@ class FlowerApp(App):
         
         # 성장 기간 
         growth_layout = BoxLayout(orientation='horizontal', size_hint=(1, None), height=30, spacing=20, padding=[20, 0])
-        # growth = Label(text=f" [b]성장 기간:[/b] {self.flower['growth_duration_days']}/180", markup=True, font_name=font_path, font_size='18sp', halign='left', color=[0, 0, 0, 1], width=160, size_hint=(None, None), height=40)
         growth = Label(text=f" [b]개화 기간[/b]({self.flower['growth_duration_days']}일)", markup=True, font_name=font_path, font_size='20sp', halign='left', color=[0, 0, 0, 1], width=160, size_hint=(None, None), height=40)
         growth.bind(width=lambda inst, val: setattr(inst, 'text_size', (val - 20, inst.height)))
         growth_layout.add_widget(growth)
@@ -149,7 +152,6 @@ class FlowerApp(App):
 
         # 관수 주기
         water_layout = BoxLayout(orientation='horizontal', size_hint=(1, None), height=30, spacing=20, padding=[20, 0])
-        # water = Label(text=f" [b]관수 주기:[/b] {self.flower['watering_cycle']}/7", markup=True, font_name=font_path, font_size='20sp', halign='left', color=[0, 0, 0, 1], width=160, size_hint=(None, None), height=40)
         water = Label(text=f" [b]관수 주기[/b]({self.flower['watering_cycle']}일)  ", markup=True, font_name=font_path, font_size='20sp', halign='left', color=[0, 0, 0, 1], width=160, size_hint=(None, None), height=40)
         water.bind(width=lambda inst, val: setattr(inst, 'text_size', (val - 20, inst.height)))
         water_layout.add_widget(water)
@@ -172,8 +174,7 @@ class FlowerApp(App):
 
         return layout
     
-## 재선택시, 추가적인 정보를 더 물어보는 것도 ㄱㅊ, 
-# but 시나리오 상에 다운로드 받을 이미지가 많아짐
+    # 선택 클릭 시
     def on_select(self, instance):
         print("선택되었습니다.")
         tts("선택되었습니다")
@@ -195,6 +196,7 @@ class FlowerApp(App):
         self.redo = False
         App.get_running_app().stop()
 
+    # 재선택 클릭 시
     def on_reselect(self, instance):
         print("재선택되었습니다.")
         tts("재선택되었습니다")
@@ -202,8 +204,7 @@ class FlowerApp(App):
         App.get_running_app().stop()
 
 
-def run_flower_logic(node):
-    
+def run_flower_logic(node):  
     try:
         # json 파일과 꽃 키워드 매칭
         with open(json_path, 'r') as f:
@@ -212,7 +213,6 @@ def run_flower_logic(node):
         # 꽃 키워드 추출
             keyword = None
             while keyword is None:
-## 여기에 로봇이 선물 목적과 남은 기간을 묻는 부분 추가 
                 tts("선물의 목적과 남은 기간을 말씀해주세요")
                 keyword = node.extract_keyword()  
                 if keyword is None:
@@ -222,19 +222,10 @@ def run_flower_logic(node):
                 else:
                     node.get_logger().info(f"\n목적-{keyword[0][0]}, 기간-{keyword[1][0]}\n") 
 
-
             object = keyword[0][0]         # 축하
             destination = keyword[1][0]    # 1개월이내
-            # 해바라기: 졸업 1개월이내
-            # 튤립 : 축하 4-6개월
-
-            # template:str, input_list:list
-            # template = "{}, {} 2개의 키워드를 추출하였습니다"
-            # input_list = [object, destination]
-            # text = make_txt(template, input_list)
-            # tts(text)
-
-        
+            # object = "위로"
+            # destination = "1-3개월"  
 
             flower = node.find_flower(flower_data, object, destination)
 
@@ -253,8 +244,6 @@ def run_flower_logic(node):
     except Exception as e:
         node.get_logger().error(f"Error in main flow: {e}")
     finally:
-        # node.destroy_node()
-        # rclpy.shutdown()
         pass
 
 def main():
@@ -271,7 +260,6 @@ def main():
             node.cmd_received.wait()
             node.get_logger().info('Command 1 received, now starting main flow')
 
-            # cmd_received 발생 후 run_flower_logic 수행
             run_flower_logic(node)
     except KeyboardInterrupt:
         print("사용자에 의해 종료되었습니다.")

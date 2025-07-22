@@ -45,7 +45,7 @@ setup(
             'wrap = bloom_for_you.flower_wrapping:main',
             'water = bloom_for_you.watering_scheduler:main',            
             'gui_test = bloom_for_you.gui_test:main',
-            'juntae_pub = bloom_for_you.juntae_pub:main',
+            'topic_pub = bloom_for_you.topic_pub_test:main',
             
             'speech_to_command = bloom_for_you.speech_to_command:main',
             'make_letter_card = bloom_for_you.make_letter_card:main',
