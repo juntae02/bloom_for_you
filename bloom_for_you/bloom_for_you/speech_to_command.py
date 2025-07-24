@@ -123,6 +123,9 @@ class SpeechToCommand(Node):
                     temp_txt = "음성 녹음"
                 elif cmd_num == 20:
                     temp_txt = "포장"
+                # 관리자 호출
+                elif cmd_num == 4:
+                    temp_txt = "관리자 호출"
                 
                 return_val = tts.make_txt("예약번호는 {}입니다. {}을 고르셨습니다", [res_num, temp_txt])
                 if DEBUG_ON_OFF:
