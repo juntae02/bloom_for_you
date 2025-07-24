@@ -12,11 +12,11 @@ import numpy as np
 PACKAGE_NAME = "bloom_for_you"
 PACKAGE_PATH = get_package_share_directory(PACKAGE_NAME)
 
-YOLO_MODEL_FILENAME = "best.pt"
-YOLO_CLASS_NAME_JSON = "class_name_tool.json"
+YOLO_MODEL_FILENAME = "flower.pt"
+YOLO_CLASS_NAME_JSON = "flower.json"
 
-YOLO_MODEL_PATH = os.path.join(PACKAGE_PATH, "resource", YOLO_MODEL_FILENAME)
-YOLO_JSON_PATH = os.path.join(PACKAGE_PATH, "resource", YOLO_CLASS_NAME_JSON)
+YOLO_MODEL_PATH = os.path.join(PACKAGE_PATH, "resource/models_and_json", YOLO_MODEL_FILENAME)
+YOLO_JSON_PATH = os.path.join(PACKAGE_PATH, "resource/models_and_json", YOLO_CLASS_NAME_JSON)
 
 class YoloModel:
     def __init__(self, pt_path: str, json_path: str):
