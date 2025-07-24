@@ -36,7 +36,7 @@ img_path = resource_path + "/flowers_img"
 
 CMD_RMD = 1 # 꽃 추천 노드 실행
 
-## 꽃 추천 클래스
+# ────── 꽃 추천 클래스 ──────
 class ExtractKeyword(Node):
     def __init__(self):
         super().__init__('extract_keyword_node')
@@ -54,7 +54,7 @@ class ExtractKeyword(Node):
             self.msg_zone = msg.zone_number
             self.cmd_received.set()
 
-    # 키워드 추출
+    # ────── 키워드 추출 함수 ──────
     def extract_keyword(self):
         response = keyword_extraction(prompt_path)
         result = response.strip().split("/")
@@ -72,7 +72,7 @@ class ExtractKeyword(Node):
         
         return object, destination
     
-    # 꽃 추천
+    # ────── 꽃 추천 함수 ──────
     # json 파일에서 추출한 키워드와 맞는 꽃 불러오기
     def find_flower(self, flower_data, object, destination):
         for item in flower_data:
@@ -92,8 +92,7 @@ class ExtractKeyword(Node):
                         return flower
         return None
 
-
-## 추천 꽃 GUI 화면 클래스
+# ────── 추천 꽃 GUI 화면 클래스 ──────
 class FlowerApp(App):
     """추출된 키워드와 매칭된 꽃 데이터를 GUI로 보여줌
         선택 버튼을 누를 시, 씨앗 심기 노드에 토픽 발행
@@ -174,7 +173,7 @@ class FlowerApp(App):
 
         return layout
     
-    # 선택 클릭 시
+    # ────── "선택" 클릭 함수 ──────
     def on_select(self, instance):
         print("선택되었습니다.")
         tts("선택되었습니다")
@@ -196,14 +195,14 @@ class FlowerApp(App):
         self.redo = False
         App.get_running_app().stop()
 
-    # 재선택 클릭 시
+    # ────── "재선택" 클릭 함수 ──────
     def on_reselect(self, instance):
         print("재선택되었습니다.")
         tts("재선택되었습니다")
         self.redo = True
         App.get_running_app().stop()
 
-
+# ────── 꽃 추천 구현 함수 ──────
 def run_flower_logic(node):  
     try:
         # json 파일과 꽃 키워드 매칭
@@ -224,11 +223,13 @@ def run_flower_logic(node):
 
             object = keyword[0][0]         # 축하
             destination = keyword[1][0]    # 1개월이내
-            # object = "위로"
-            # destination = "1-3개월"  
+                # object = "위로"
+                # destination = "1-3개월"  
 
+            # 키워드를 바탕으로 꽃 추천
             flower = node.find_flower(flower_data, object, destination)
 
+            # 추천 꽃 GUI 화면
             if flower:
                 app = FlowerApp(flower, node)
                 app.run()
@@ -241,8 +242,10 @@ def run_flower_logic(node):
             else:
                 node.get_logger().error("GUI를 실행시키지 못했습니다.")
                 break
+
     except Exception as e:
         node.get_logger().error(f"Error in main flow: {e}")
+
     finally:
         pass
 
