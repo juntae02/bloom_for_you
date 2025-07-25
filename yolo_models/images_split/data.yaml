@@ -1,0 +1,5 @@
+names: ["해바라기", "튤립", "화분", "씨앗", "튤립새싹", "해바라기새싹"]
+nc: 6
+test: /home/juntae02/Desktop/images_split/test
+train: /home/juntae02/Desktop/images_split/train
+val: /home/juntae02/Desktop/images_split/val
