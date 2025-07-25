@@ -100,3 +100,8 @@
 | 지예은 | Function Modules 설계 / 재배(물 주기) / 포장(꽃 포장) | [@yeyeyeyeyeyeun](https://github.com/yeyeyeyeyeyeun) |
 | 박준태 | 씨앗 선택(꽃 추천, 씨앗 심기)  | [@juntae02](https://github.com/juntae02) |
 | 김요한 | 재배(음성 메시지 녹음) / 포장(card 생성) / 백그라운드 실행(서버 실행) | [@KIMYOHAN60](https://github.com/KIMYOHAN60) |
+
+
+- 발표 자료  
+> 언어는 영어로 설정해야 폰트가 변형되지 않음  
+>> - [🌸 Bloom for you](https://www.canva.com/design/DAGt2hxdEvg/8CEbznRIRrQc8xgAosH4Jg/edit?utm_content=DAGt2hxdEvg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
