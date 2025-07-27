@@ -106,7 +106,17 @@
 > 언어는 영어로 설정해야 폰트가 변형되지 않음  
 >> - [🌸 Bloom for you](https://www.canva.com/design/DAGt2hxdEvg/8CEbznRIRrQc8xgAosH4Jg/edit?utm_content=DAGt2hxdEvg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
-## 라이선스
-/bloom_for_you/bloom_for_you/bloom_for_you/function_modules/onrobot_.py
 
-https://github.com/takuya-ki/onrobot-rg
+## 📚 참고 및 출처
+- 본 프로젝트의 일부 코드는 **두산 로보틱스 부트캠프 교육과정**에서 제공된 `Tutorial.zip` 자료를 기반으로 작성되었습니다.
+- `STT.py`, `wakeup_word.py`, `keyword_extraction.py` 파일은 해당 자료에서 가져와 **일부 기능을 수정하여 사용**하였습니다.
+- 그 외의 파일은 프로젝트 목적에 맞게 **직접 구현된 코드**입니다.
+- 원본 전체 코드는 포함되어 있지 않으며, 본 저장소에는 **필요한 일부 파일만 포함**되어 있습니다.
+
+- `bloom_for_you/function_modules/onrobot_.py` 파일은 아래 공개 저장소의 코드를 기반으로 **일부 수정하여 사용**하였습니다:  
+  🔗 https://github.com/takuya-ki/onrobot-rg
+
+- 원본 코드는 [MIT License](https://github.com/takuya-ki/onrobot-rg/blob/main/LICENSE)를 따르며,  
+  본 저장소 내 수정된 코드 역시 동일한 라이선스를 존중하여 사용하고 있습니다.
+
+> 본 저장소는 **교육 및 학습 목적**으로만 사용됩니다.
