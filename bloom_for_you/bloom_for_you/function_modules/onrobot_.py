@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# onrobot_.py
+# 원본 출처: https://github.com/takuya-ki/onrobot-rg
+# 원본 코드 일부를 수정하여 사용함
+# 원저작자의 라이선스(License)는 원 저장소의 규정을 따릅니다.
 
 from pymodbus.client.sync import ModbusTcpClient as ModbusClient
 
