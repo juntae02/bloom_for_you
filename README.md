@@ -105,3 +105,8 @@
 - 발표 자료  
 > 언어는 영어로 설정해야 폰트가 변형되지 않음  
 >> - [🌸 Bloom for you](https://www.canva.com/design/DAGt2hxdEvg/8CEbznRIRrQc8xgAosH4Jg/edit?utm_content=DAGt2hxdEvg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+
+## 라이선스
+/bloom_for_you/bloom_for_you/bloom_for_you/function_modules/onrobot_.py
+
+https://github.com/takuya-ki/onrobot-rg
