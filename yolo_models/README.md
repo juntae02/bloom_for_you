@@ -16,9 +16,9 @@
   &nbsp;&nbsp;더 정밀한 특징 추출과 표현 능력을 가진 YOLO11n 모델로 전환했습니다.  
   그 결과 동일한 이미지에서도 화분과 꽃을 모두 동시에 인식할 수 있었습니다.  
 
-- 🔍 아래는 두 모델의 인식 결과 비교 이미지입니다 :
+- 🔍 아래는 두 모델의 인식 결과 비교 이미지입니다 :  
   <img src="./comparison/compare_visual.jpg" alt="인식 결과 비교 이미지" width="400"/>
 
-- 📊 성능 개선 결과 :
+- 📊 성능 개선 결과 :  
   <img src="./comparison/compare_mAP50-95.jpg" alt="성능 비교 그래프" width="400"/>
 <br />
