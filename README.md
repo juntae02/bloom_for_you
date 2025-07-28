@@ -47,12 +47,14 @@
   해당 꽃 정보는 **Kivy 기반의 GUI**에서 사용자가 결과를 확인하고, **"선택" 또는 "재선택"을** 요청할 수 있는 인터페이스를 구현했습니다.
   - [꽃 추천 기능](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/bloom_for_you/flower_recommender.py#L205-L250)
   - [Kivy(GUI 연동)](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/bloom_for_you/flower_recommender.py#L95-L203)
-  - [prompt](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/resource/prompt/recommender_prompt.txt)
-  - [json](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/resource/flower_recommendations.json)  
-- ***두산 로봇암 기반 씨앗 심기 기능***:  
-  두산 로봇암을 제어하여, 씨앗을 자동으로 심는 기능을 구현했습니다.  
-  토픽으로 꽃의 정보를 받아, 해당 꽃의 씨앗 위치로 이동을 함. 이후에 YOLO를 통해 씨앗을 탐지함. 만약 pick을 못하면 3번 반복
-  씨앗을 운반하여, 화분을 탐지하고 화분에 씨앗을 심음. 이후 토픽 정보 중에 재배 위치를 받으면 해당 위치로 이동해서 보관 + 순응제어
+  - [추천 프롬프트](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/resource/prompt/recommender_prompt.txt)
+  - [JSON 파일](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/resource/flower_recommendations.json)  
+- ***자동화된 씨앗 심기 기능***:  
+  **ROS2 토픽 통신**을 통해 전달받을 꽃 정보를 해석하여, **로봇의 동작 흐름**을 설계했습니다.  
+  해당 꽃 정보를 바탕으로, YOLO를 통해 씨앗 및 화분의 위치를 탐지하고, **"씨앗 집기 -> 운반 -> 이식 -> 재배 구역 이동"** 로직을 구현했습니다.  
+  **씨앗 미탐지 예외 처리** 및 **순응 제어 기반의 정밀 배치 기능** 로직도 구성하여, 안정적인 동작을 보장했습니다.
+  - [씨앗 Pick&Place](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/bloom_for_you/seed_planting.py#L76-L156)
+  - [화분 Compliance Control](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/bloom_for_you/seed_planting.py#L158-L184)
 <br />
 
 ## 🤔 트러블 슈팅 및 해결 과정 
