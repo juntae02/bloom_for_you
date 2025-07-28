@@ -21,9 +21,9 @@
 
 ## 🎥 시연 영상
 - 영상(본인): [Demo_Me](https://www.youtube.com/watch?v=E3JtXJ45bFk)  
-- 영상(전체): [Demo_ALL](https://www.youtube.com/watch?v=jA9iK2Lapts)  
+- 영상(전체): [Demo_All](https://www.youtube.com/watch?v=jA9iK2Lapts)  
 👉 클릭해서 시연 영상 보기
-- 발표 자료: [Presentation](https://www.canva.com/design/DAGt2hxdEvg/8CEbznRIRrQc8xgAosH4Jg/edit?utm_content=DAGt2hxdEvg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+- 발표 자료: [Presentation](https://www.canva.com/design/DAGt2hxdEvg/8CEbznRIRrQc8xgAosH4Jg/edit?utm_content=DAGt2hxdEvg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)  
 👉 언어는 영어로 설정해야 폰트가 변형되지 않습니다.  
 <br />
 
