@@ -20,7 +20,7 @@
   <img src="./comparison/compare_visual.jpg" alt="인식 결과 비교 이미지" width="500" height="500"/>
 
 - 📊 성능 개선 결과 :  
-  &nbsp;&nbsp;mAP@0.5:0.95 기준으로 약 2% 향상된 성능을 보였으며
+  &nbsp;&nbsp;mAP@0.5:0.95 기준으로 약 2% 향상된 성능을 보였으며  
   <img src="./comparison/compare_mAP50-95.jpg" alt="성능 비교 그래프" width="500" height="500"/>  
   👉 [YOLOv8n 성능 결과](https://github.com/juntae02/bloom_for_you/blob/main/yolo_models/yolov8n/results/results_yolov8n.png)  
   👉 [YOLO11n 성능 결과](https://github.com/juntae02/bloom_for_you/blob/main/yolo_models/yolo11n/results/results_yolo11n.png)  
