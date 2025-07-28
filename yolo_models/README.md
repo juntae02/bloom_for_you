@@ -8,6 +8,8 @@
 
 
 
-<img src="./comparison/compare_mAP50-95.jpg" alt="성능 비교 그래프" width="200"/>
+<img src="./comparison/compare_mAP50-95.jpg" alt="성능 비교 그래프" width="400"/>
+
 ---
-<img src="./comparison/compare_visual.jpg" alt="인식 결과 비교 이미지" width="200"/>
+
+<img src="./comparison/compare_visual.jpg" alt="인식 결과 비교 이미지" width="400"/>
