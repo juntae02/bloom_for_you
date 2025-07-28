@@ -1,13 +1,13 @@
 ## 🌸 Bloom for you
-- ***키움의 과정을 선물하는*** 꽃 선물 서비스:  
-&nbsp;선물의 목적과 기간에 적합한 꽃을 추천하고, 재배 과정에서 음성을 기록하여 진심을 전달합니다.  
+- ***키움의 과정을 선물하는*** 꽃 선물 서비스 :  
+&nbsp;&nbsp;선물의 목적과 기간에 적합한 꽃을 추천하고, 재배 과정에서 음성을 기록하여 진심을 전달합니다.  
 또한, 로봇암 기반의 자동화 시스템으로 재배 실패 부담을 해소합니다.
 - 개발기간 : 2025.06.09-06.20(2주)  
 - 개발인원 : 4명(팀원)  
 <br />
 
 ## 🔍 문제 정의
-> &nbsp;이 프로젝트는 ***"선물의 종류는 많지만 감정은 없다"는*** 문제의식에서 출발했습니다.  
+> &nbsp;&nbsp;이 프로젝트는 ***"선물의 종류는 많지만 감정은 없다"는*** 문제의식에서 출발했습니다.  
 > 기존의 선물은 순간적인 감동에 그치는 경우가 많습니다. 우리는 받는 이가 꽃을 직접 기르지 않더라도, 꽃의 성장 과정을 ***공유***하며 지속적인 ***기쁨과 진심***이 전해지는, ***새로운 형태의 선물***을 만들고자 했습니다. 또한, 식물 재배의 어려움과 실패에 대한 부담을 ***로봇 기술***로 해결함으로써, ***누구나 꽃을 쉽게 기를 수 있도록 돕는 것***을 목표로 했습니다.
 <br />
 
@@ -20,11 +20,11 @@
 <br />
 
 ## 🎥 시연 영상
-- 영상(본인): [Demo_Me](https://www.youtube.com/watch?v=E3JtXJ45bFk)  
-- 영상(전체): [Demo_All](https://www.youtube.com/watch?v=jA9iK2Lapts)  
+- 영상(본인) : [Demo_Me](https://www.youtube.com/watch?v=E3JtXJ45bFk)  
+- 영상(전체) : [Demo_All](https://www.youtube.com/watch?v=jA9iK2Lapts)  
 👉 클릭해서 시연 영상 보기
-- 발표 자료: [Presentation](https://www.canva.com/design/DAGt2hxdEvg/8CEbznRIRrQc8xgAosH4Jg/edit?utm_content=DAGt2hxdEvg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)  
-👉 언어는 영어로 설정해야 폰트가 변형되지 않습니다.  
+- 발표 자료 : [Presentation](https://www.canva.com/design/DAGt2hxdEvg/8CEbznRIRrQc8xgAosH4Jg/edit?utm_content=DAGt2hxdEvg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)  
+⚠️ 언어는 영어로 설정해야 폰트가 변형되지 않습니다.  
 <br />
 
 ## 🛠️ 기술 스택
@@ -37,13 +37,13 @@
 <br />
 
 ## 👨‍💻 담당한 기능
-- ***YOLO 모델 생성 및 학습***:  
-  &nbsp;프로젝트에 **최적화된 객체 탐지 모델을 구축하기 위해**, YOLO 모델을 생성 및 학습시켰습니다.  
+- ***YOLO 모델 생성 및 학습*** :  
+  &nbsp;&nbsp;프로젝트에 **최적화된 객체 탐지 모델을 구축하기 위해**, YOLO 모델을 생성 및 학습시켰습니다.  
   이를 통해, 특정 꽃의 종류나 씨앗을 탐지하는 데 기여했습니다.  
   👉 [YOLO 모델 및 과정](https://github.com/juntae02/bloom_for_you/tree/main/yolo_models)
   
-- ***상황별 꽃 추천 기능***:  
-  &nbsp;OpenAI API 기반 키워드 추출 함수(팀원)를 활용하여, 사용자의 **목적과 상황을 반영하는 프롬프트**를 설계했습니다.  
+- ***상황별 꽃 추천 기능*** :  
+  &nbsp;&nbsp;OpenAI API 기반 키워드 추출 함수(팀원)를 활용하여, 사용자의 **목적과 상황을 반영하는 프롬프트**를 설계했습니다.  
   추출된 키워드를 **JSON 파일과 매칭**하여, 적절한 꽃 정보를 자동으로 불러오는 **추천** 로직을 구성했습니다.  
   해당 꽃 정보는 **Kivy 기반의 GUI**에서 사용자가 결과를 확인하고, **"선택" 또는 "재선택"을** 요청할 수 있는 인터페이스를 구현했습니다.  
   👉 [꽃 추천 기능](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/bloom_for_you/flower_recommender.py#L205-L250)  
@@ -51,8 +51,8 @@
   👉 [프롬프트](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/resource/prompt/recommender_prompt.txt)  
   👉 [JSON 파일](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/resource/flower_recommendations.json)
   
-- ***자동화된 씨앗 심기 기능***:  
-  &nbsp;**ROS2 토픽 통신**을 통해 전달받을 꽃 정보를 해석하여, **로봇의 동작 흐름**을 설계했습니다.  
+- ***자동화된 씨앗 심기 기능*** :  
+  &nbsp;&nbsp;**ROS2 토픽 통신**을 통해 전달받을 꽃 정보를 해석하여, **로봇의 동작 흐름**을 설계했습니다.  
   해당 꽃 정보를 바탕으로, YOLO를 통해 씨앗 및 화분의 위치를 탐지하고, **"씨앗 집기 -> 운반 -> 이식 -> 재배 구역 이동"** 로직을 구현했습니다.  
   **씨앗 미탐지 예외 처리** 및 **순응 제어 기반의 정밀 배치 기능** 로직도 구성하여, 안정적인 동작을 보장했습니다.  
   👉 [씨앗 Pick&Place](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/bloom_for_you/seed_planting.py#L76-L156)  
