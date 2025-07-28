@@ -38,16 +38,16 @@
 
 ## 👨‍💻 담당한 기능
 - ***YOLO 모델 생성 및 학습***:  
-  프로젝트에 최적화된 객체 탐지 모델 구축하기 위해, YOLO 모델을 학습시켰습니다.  
+  프로젝트에 **최적화된 객체 탐지 모델을 구축하기 위해**, YOLO 모델을 생성 및 학습시켰습니다.  
   이를 통해, 특정 꽃의 종류나 씨앗을 탐지하는 데 기여했습니다.  
-  👉 [yolo 모델 및 과정](https://github.com/juntae02/bloom_for_you/tree/main/yolo_models)
+  👉 [YOLO 모델 및 과정](https://github.com/juntae02/bloom_for_you/tree/main/yolo_models)
 - ***상황별 꽃 추천 기능***:  
   OpenAI API 기반 키워드 추출 함수(팀원)를 활용하여, 사용자의 **목적과 상황을 반영하는 프롬프트**를 설계했습니다.  
   추출된 키워드를 **JSON 파일과 매칭**하여, 적절한 꽃 정보를 자동으로 불러오는 **추천** 로직을 구성했습니다.  
   해당 꽃 정보는 **Kivy 기반의 GUI**에서 사용자가 결과를 확인하고, **"선택" 또는 "재선택"을** 요청할 수 있는 인터페이스를 구현했습니다.  
   👉 [꽃 추천 기능](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/bloom_for_you/flower_recommender.py#L205-L250)  
-  👉 [Kivy(GUI 연동)](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/bloom_for_you/flower_recommender.py#L95-L203)  
-  👉 [추천 프롬프트](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/resource/prompt/recommender_prompt.txt)  
+  👉 [GUI 연동(Kivy) 기능](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/bloom_for_you/flower_recommender.py#L95-L203)  
+  👉 [프롬프트](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/resource/prompt/recommender_prompt.txt)  
   👉 [JSON 파일](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/resource/flower_recommendations.json)  
 - ***자동화된 씨앗 심기 기능***:  
   **ROS2 토픽 통신**을 통해 전달받을 꽃 정보를 해석하여, **로봇의 동작 흐름**을 설계했습니다.  
