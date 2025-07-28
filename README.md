@@ -23,6 +23,8 @@
 - 영상(본인): [Demo](https://www.youtube.com/watch?v=E3JtXJ45bFk)  
 - 영상(전체): [Demo](https://www.youtube.com/watch?v=jA9iK2Lapts)  
 👉 클릭해서 시연 영상 보기
+- 발표 자료: [Presentation](https://www.canva.com/design/DAGt2hxdEvg/8CEbznRIRrQc8xgAosH4Jg/edit?utm_content=DAGt2hxdEvg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+> 언어는 영어로 설정해야 폰트가 변형되지 않습니다.  
 <br />
 
 ## 🛠️ 기술 스택
@@ -66,12 +68,6 @@
 - 석환: 기능 모듈화, 전체 시나리오 관리 및 총괄 지휘  
 - 예은: 기능 모듈화, 자동 관수 및 꽃 포장 
 - 요한: Front-end, 음성 메시지 기록 및 QR코드 생성 
-<br />
-
-## 자료
-> 언어는 영어로 설정해야 폰트가 변형되지 않습니다.  
-- 발표 자료: [Presentation](https://www.canva.com/design/DAGt2hxdEvg/8CEbznRIRrQc8xgAosH4Jg/edit?utm_content=DAGt2hxdEvg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
-- 노션: [Notion]
 <br />
 
 ## 📚 참고 및 출처
