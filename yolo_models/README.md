@@ -28,8 +28,8 @@
 | 항목               | YOLOv8n            | YOLO11n                  |  
 | ----------------- | ------------------ | ------------------------ |  
 |  📌 mAP@0.5:0.95  | 86.2%              | **88.1%**                |  
-|  👍 장점           | 낮은 리소스 사용      | 작은 객체 탐지 한계          |  
-|  👎 단점           | 높은 탐지 정확도      | 높은 리소스 소모            |  
+|  👍 장점           | 낮은 리소스 사용, 경량 모델      | 높은 탐지 정확도, 낮은 연산량          |  
+|  👎 단점           | 작은 객체 탐지 한계, 높은 연산량      | 파라미터 수 많음, 리소스 소모 큼           |  
 
 👉 [YOLOv8n 성능 결과](https://github.com/juntae02/bloom_for_you/blob/main/yolo_models/yolov8n/results)  
 👉 [YOLO11n 성능 결과](https://github.com/juntae02/bloom_for_you/blob/main/yolo_models/yolo11n/results)  
