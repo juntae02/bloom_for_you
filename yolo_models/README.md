@@ -1,6 +1,7 @@
 ## 🧠 YOLO 모델 생성 및 학습
 > &nbsp;&nbsp;프로젝트에 최적화된 객체 탐지 모델을 구축하기 위해, YOLO 모델을 생성 및 학습했습니다.  
 > 이 모델은 시나리오 상에서 중요한 역할을 하는 **화분, 꽃, 씨앗 등 한정된 객체**를 정확하게 탐지하는 데 기여했습니다.  
+
 👉 [YOLO 모델](https://github.com/juntae02/bloom_for_you/tree/main/bloom_for_you/resource/models_and_json)
 <br />
 
