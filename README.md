@@ -59,7 +59,7 @@
   👉 [화분 Compliance Control](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/bloom_for_you/seed_planting.py#L158-L184)
 <br />
 
-## 🤔 트러블 슈팅 및 해결 과정 
+## 🤔 트러블슈팅 및 해결 과정 
 - 문제 상황: 화분에 꽃이 심어져 있을 때, 꽃은 인식하지 못하고 화분만 인식하는 문제 발생
 > - 시도했던 방법:
 > - 해결 과정:
