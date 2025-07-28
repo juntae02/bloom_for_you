@@ -14,22 +14,23 @@
   하지만 YOLOv8n은 **화분과 꽃의 경계가 겹치는 경우**, 상대적으로 작은 객체인 꽃이 화분에 묻혀, **정확한 분리 탐지**가 어렵다고 판단했습니다.  
   
 - **해결 방안** :  
-
   &nbsp;&nbsp;더 정밀한 특징 추출과 표현 능력을 가진 **YOLO11n** 모델로 전환하여 학습했습니다.  
   그 결과 동일한 이미지에서도 **화분과 꽃을 모두 동시에 인식**할 수 있었습니다.  
 <br />
 
 ## 🔍 두 모델의 인식 결과 비교 이미지
-  <img src="./comparison/compare_visual.jpg" alt="인식 결과 비교 이미지" width="500" height="500"/>
+<img src="./comparison/compare_visual.jpg" alt="인식 결과 비교 이미지" width="500" height="500"/>
 
 ## 📊 성능 개선 결과 
-  &nbsp;&nbsp;**mAP@0.5:0.95** 기준으로 **약 2%의 성능 향상**이 있었으며,  
-  이는 **작은 객체, 경계 겹침** 등 다양한 조건에서도 탐지 정확도가 개선되었음을 보여줍니다.  
-  <img src="./comparison/compare_mAP50-95.jpg" alt="성능 비교 그래프" width="500" height="500"/>  
-  | 항목               | YOLOv8n            | YOLO11n                  |  
-  | ----------------- | ------------------ | ------------------------ |  
-  |  📌 mAP@0.5:0.95  | 86.2%              | **88.1%**                |  
-  |  ⚙️ 특징           | 낮은 리소스 사용      | 높은 탐지 정확도            |  
-  👉 [YOLOv8n 성능 결과](https://github.com/juntae02/bloom_for_you/blob/main/yolo_models/yolov8n/results)  
-  👉 [YOLO11n 성능 결과](https://github.com/juntae02/bloom_for_you/blob/main/yolo_models/yolo11n/results)  
+&nbsp;&nbsp;**mAP@0.5:0.95** 기준으로 **약 2%의 성능 향상**이 있었으며,  
+이는 **작은 객체, 경계 겹침** 등 다양한 조건에서도 탐지 정확도가 개선되었음을 보여줍니다.  
+<img src="./comparison/compare_mAP50-95.jpg" alt="성능 비교 그래프" width="500" height="500"/>  
+| 항목               | YOLOv8n            | YOLO11n                  |  
+| ----------------- | ------------------ | ------------------------ |  
+|  📌 mAP@0.5:0.95  | 86.2%              | **88.1%**                |  
+|  👍 장점           | 낮은 리소스 사용      | 작은 객체 탐지 한계          |  
+|  👎 단점           | 높은 탐지 정확도      | 높은 리소스 소모            |  
+
+👉 [YOLOv8n 성능 결과](https://github.com/juntae02/bloom_for_you/blob/main/yolo_models/yolov8n/results)  
+👉 [YOLO11n 성능 결과](https://github.com/juntae02/bloom_for_you/blob/main/yolo_models/yolo11n/results)  
 <br />
