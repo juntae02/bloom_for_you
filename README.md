@@ -28,7 +28,7 @@
 <br />
 
 ## 🛠️ 기술 스택
-- **하드웨어 제어** : Doosan Robot Arm
+- **로봇 하드웨어** : Doosan Robotics M-series M0609
 - **개발 언어** : Python 
 - **프론트엔드** : Kivy
 - **백엔드** : Flask, rclpy
