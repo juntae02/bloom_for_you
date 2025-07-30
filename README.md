@@ -77,6 +77,17 @@ YOLO 탐지를 활용한 씨앗 및 화분의 위치를 파악 후, **"씨앗 �
   👉 [트러블슈팅 해결 과정](https://github.com/juntae02/bloom_for_you/tree/main/yolo_models)
 ---
 
+- **문제 상황 2: 화분에 꽃이 있는 경우, 꽃이 탐지되지 않음**
+- 문제 상황: 멀티 쓰레드
+  - **상황** :  
+    &nbsp;&nbsp;화
+  - **원인** :  
+    &nbsp;&nbsp;화
+  - **해결** :  
+    &nbsp;&nbsp;화
+    👉 [트러블슈팅 해결 과정](https://github.com/juntae02/bloom_for_you/tree/main/yolo_models)
+---
+
 - **문제 상황 3: 씨앗 집기 실패가 간헐적으로 발생**
   - **상황** :  
     &nbsp;&nbsp;로봇이 씨앗을 인식하고 집는 과정에서 간헐적으로 **씨앗을 놓치거나**, **아무것도 잡지 못한 채 동작을 종료하는** 문제가 발생했습니다.
@@ -90,14 +101,7 @@ YOLO 탐지를 활용한 씨앗 및 화분의 위치를 파악 후, **"씨앗 �
     그 결과, 씨앗이 잡히지 않는 상황에서도 **시스템이 비정상 중단되지 않고**, **관리자를 호출**을 통해 예외 상황을 안전하게 처리할 수 있도록 개선했습니다.   
   👉 [씨앗 집기 코드](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/bloom_for_you/seed_planting.py#L93-L138)  
   👉 [관리자 호출 코드](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/bloom_for_you/seed_planting.py#L201-L218)
----
-
-- **문제 상황 2: 화분에 꽃이 있는 경우, 꽃이 탐지되지 않음**
-- 문제 상황: 멀티 쓰레드
-- 문제 상황: 
 <br />
-
-
 
 ## 💡 과정 속에서 배운 점
 - 배운 점:
