@@ -42,7 +42,8 @@
 - ***YOLO 기반 객체 탐지 모델 생성 및 학습*** :  
   &nbsp;&nbsp;프로젝트에서 사용할 객체(화분, 꽃, 씨앗 등)를 **직접 촬열하고 라벨링**한 후, 이를 기반으로 커스텀 데이터셋을 구성하여 **YOLO11n 모델**을 학습시켰습니다. 학습은 **ultralytics 라이브러리**를 활용했으며, 이미지 크기, 에폭 수, 배치 크기 등을 조정하여 **프로젝트 환경에 맞는 .pt 모델을 생성**했습니다.  
   👉 [모델 생성 및 학습](https://github.com/juntae02/bloom_for_you/tree/main/yolo_models)
-  
+---
+
 - ***상황별 꽃 추천 기능*** :  
 &nbsp;&nbsp;OpenAI API 기반 키워드 추출 함수(팀원)를 활용하여, 대화 속에서 선물의 **목적과 남은 기간을 효율적으로 추출할 수 있도록 하는 프롬프트**를 설계했습니다. 
 추출된 키워드를 기반으로 **JSON 데이터와 매칭**하여, 적절한 꽃 정보를 자동으로 **추천하는** 로직을 구현했습니다. 
@@ -51,7 +52,8 @@
   👉 [flower_recommender.py (GUI)](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/bloom_for_you/flower_recommender.py#L95-L203)  
   👉 [추천 프롬프트 텍스트](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/resource/prompt/recommender_prompt.txt)  
   👉 [추천 JSON 데이터](https://github.com/juntae02/bloom_for_you/blob/main/bloom_for_you/resource/flower_recommendations.json)
-  
+---
+
 - ***자동화된 씨앗 심기 기능*** :  
 &nbsp;&nbsp;**ROS2 토픽 통신**을 통해 꽃 정보를 전달받고, 이를 해석하여 로봇 동작을 제어했습니다. 
 YOLO 탐지를 활용한 씨앗 및 화분의 위치를 파악 후, **"씨앗 집기 -> 운반 -> 이식 -> 재배 구역 이동"** 로직을 구현했습니다. 
@@ -67,7 +69,7 @@ YOLO 탐지를 활용한 씨앗 및 화분의 위치를 파악 후, **"씨앗 �
   - **원인** : YOLOv8n 모델은 경량화되어 있지만, 화분과 꽃의 경계가 겹치는 경우 작은 객체인 꽃을 놓침
   - **해결** : 
   👉 [트러블슈팅 해결 과정](https://github.com/juntae02/bloom_for_you/tree/main/yolo_models)
-
+---
 
 - **문제 상황 3: 씨앗 집기 실패가 간헐적으로 발생**
 
